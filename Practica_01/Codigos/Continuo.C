@@ -91,7 +91,7 @@ int main(int argc, char *argv[]){
 		cout << "\t" << _tinicio << "\t" << __x[0]<< "\t" << __y[0]<< endl;
 	}
 	for(double t = _tinicio ; t < (_tfin-10e-8) ; t += inc ){
-		resolver( t, t + inc, aux );
+		resolver(t, t + inc, aux);
 		if(!graficar){
 			cout << "\t" << aux[0] << "\t" << aux[1] << "\t" << aux[2] << endl;
 		}

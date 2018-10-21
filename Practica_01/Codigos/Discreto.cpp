@@ -51,7 +51,6 @@ list<Nodo> lsuc;
   */
 int main(int argc, char *argv[]){
 	if((argc != 8) && (argc != 3)){
-		system("clear");
 		cout << "Error: Numero Incorrecto de Parametros.\n";
 		cout << "El Uso Correcto del Programa es:\n";
 		cout << "<Numero Radares> <Numero Repuestos> <Vmin> <Vmax> <Tiempo Fallo> <Tiempo Fin> <Numero Simulaciones>\n" << endl;
@@ -107,6 +106,8 @@ int main(int argc, char *argv[]){
 		cout << "La Desviacion Tipica del Numero de Fallos en los Radares es: " << desvVeces;
 		cout << "\nLa Desviacion Tipica del Tiempo de Desproteccion es: " << tDesprotegidoDesv;
 		cout << "\nLa Desviacion Tipica del Porcentaje de Tiempo de Desproteccion es: " << porcentajeDesproteccionDesv;
+	}else{
+		//printf("\n", totalRadares, totalReserva, mediaVeces, tDesprotegidoMedio, porcentajeDesproteccionMedio);
 	}
 	fin = clock();
 	fin = fin - j;
@@ -116,8 +117,6 @@ int main(int argc, char *argv[]){
 		cout << " Segundos, con " << totalRadares << " Radares y " << totalReserva << " Piezas, para un Tiempo de Parada de: " ;
 		cout << tTotal << " y Periodo de Envio a Reparacion entre " << vmin << " y " << vmax;
 		cout << ", y Tiempos entre Fallos del Radar: " <<  tfallo << "\n" << endl;
-	}else{
-		//printf("%f %f %f %f %f %f %f %f", simulaciones, tiempo, totalRadares, totalReserva, tTotal, vmin, vmax, tfallo);
 	}
 }
 
