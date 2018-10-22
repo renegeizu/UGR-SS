@@ -107,7 +107,7 @@ int main(int argc, char *argv[]){
 		cout << "\nLa Desviacion Tipica del Tiempo de Desproteccion es: " << tDesprotegidoDesv;
 		cout << "\nLa Desviacion Tipica del Porcentaje de Tiempo de Desproteccion es: " << porcentajeDesproteccionDesv;
 	}else{
-		//printf("\n", totalRadares, totalReserva, mediaVeces, tDesprotegidoMedio, porcentajeDesproteccionMedio);
+		printf("%d\t%f\t%f\n", totalReserva, mediaVeces, tfallo);
 	}
 	fin = clock();
 	fin = fin - j;
