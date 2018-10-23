@@ -55,12 +55,12 @@ else
 	# Le pasamos valores al modelo de MonteCarlo y recogemos la informacion en .dat
 	echo -e "${purple}Obteniendo datos del modelo de MonteCarlo...${nocolor}"
 
-	#for ((A=0;A<100;A=A+1))
-	#do
-	#	$ejecutables/MonteCarlo 100000 100 $A 0.9 0 >> $datos/MonteCarlo_Vista.dat
-	#	$ejecutables/MonteCarlo 100000 100 2 $A 1 >> $datos/MonteCarlo_Prob.dat
-	#	$ejecutables/MonteCarlo 100000 100 $A $A 1 >> $datos/MonteCarlo_VistaProb.dat
-	#done
+	for ((A=0;A<100;A=A+1))
+	do
+		$ejecutables/MonteCarlo 100000 100 $A 0.9 0 >> $datos/MonteCarlo_Vista.dat
+		$ejecutables/MonteCarlo 100000 100 2 $A 1 >> $datos/MonteCarlo_Prob.dat
+		$ejecutables/MonteCarlo 100000 100 $A $A 1 >> $datos/MonteCarlo_VistaProb.dat
+	done
 
 	echo -e "${purple}Finalizado${nocolor}"
 
@@ -70,17 +70,17 @@ else
 	numSimulaciones=(1 5 10 50 100 500 1000)
 	numRadares=5
 	numRepuestos=$(( $numRadares * 3 ))
-	#for B in "${numSimulaciones[@]}"
-	#do
-	#	for ((C=0;C<numRepuestos;C=C+1))
-	#	do
-	#		$ejecutables/Discreto $numRadares $C 15 30 20 365 $B >> $datos/Discreto_RepFallos$B.dat
-	#	done
-	#	for ((D=0;D<366;D=D+1))
-	#	do
-	#		$ejecutables/Discreto $numRadares 1 15 30 $D 365 $B >> $datos/Discreto_RobFallos$B.dat
-	#	done
-	#done
+	for B in "${numSimulaciones[@]}"
+	do
+		for ((C=0;C<numRepuestos;C=C+1))
+		do
+			$ejecutables/Discreto $numRadares $C 15 30 20 365 $B >> $datos/Discreto_RepFallos$B.dat
+		done
+		for ((D=0;D<366;D=D+1))
+		do
+			$ejecutables/Discreto $numRadares 1 15 30 $D 365 $B >> $datos/Discreto_RobFallos$B.dat
+		done
+	done
 
 	echo -e "${purple}Finalizado${nocolor}"
 
