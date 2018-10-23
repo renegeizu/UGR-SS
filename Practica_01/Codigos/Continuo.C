@@ -13,8 +13,8 @@ using namespace std;
 #define lgn(X,Y) (log(Y)/log(X))
 #define graficar 1
 
-double _t = 0.0, _tinicio = 0.0, _tfin = 0.0, _inc_t = 0.0;
-int _tcom = 1;
+double _t = 0.0, _tinicio = 0.0, _tfin = 0.0, _inc_t = 0.0, porcentaje = 0.0, totalPesca = 0.0;
+int _tcom = 1, diasPesca = 0, cont = 0;
 double __A = 0.0667, __B = 1.0E7, __C = 0.0222, __D = 1.0E7, __E = 36000.0, __F = 10.0;
 double *__x = new double[1], *__y = new double[1], *x_aux = new double[1], *y_aux = new double[1];
 
@@ -76,24 +76,38 @@ int main(int argc, char *argv[]){
 		cin >> __x[0];
 		cerr << " Numero inicial de peces grandes, y(0) => ";
 		cin >> __y[0];
-	}else if(argc != 4){
-		printf("\nFormato Argumentos: <Duracion> <Numero Inicial Peces Pequeños> <Numero Inicial Peces Grandes>\n");
+		cerr << " Cada cuantos dias se pesca => ";
+		cin >> diasPesca;
+		cerr << " Porcentaje de pesca => ";
+		cin >> porcentaje;
+	}else if(argc != 6){
+		printf("\nFormato Argumentos: <Duracion> <Numero Inicial Peces Pequeños> <Numero Inicial Peces Grandes> <Dias de Pesca> <Porcentaje de Pesca>\n");
 		exit(1);
 	}else{
 		sscanf(argv[1], "%lf", &_tfin);
 		sscanf(argv[2], "%lf", &__x[0]);
 		sscanf(argv[3], "%lf", &__y[0]);
+		sscanf(argv[4], "%d", &diasPesca);
+		sscanf(argv[5], "%lf", &porcentaje);
 	}
 	double inc = _inc_t*_tcom;
 	double *aux = new double[2];
 	if(!graficar){	
-		cout << "\tt\tx\ty" << endl;
-		cout << "\t" << _tinicio << "\t" << __x[0]<< "\t" << __y[0]<< endl;
+		cout << "t\tx\ty" << endl;
+		
 	}
+	cout << _tinicio << "\t" << __x[0]<< "\t" << __y[0]<< endl;
 	for(double t = _tinicio ; t < (_tfin-10e-8) ; t += inc ){
 		resolver(t, t + inc, aux);
-		if(!graficar){
-			cout << "\t" << aux[0] << "\t" << aux[1] << "\t" << aux[2] << endl;
+		cont++;
+		if(diasPesca == cont){
+			cont = 0;
+			totalPesca += aux[2]*porcentaje/100;
+			__y[0] = aux[2] = aux[2] - aux[2]*porcentaje/100;
 		}
+		cout << aux[0] << "\t" << aux[1] << "\t" << aux[2] << endl;
+	}
+	if(!graficar){
+		cout << "Porcentaje Pesca: " << porcentaje << "\tPesca Total: " << totalPesca << "\tCiclo de Pesca: " << diasPesca << " dias" << endl;
 	}
 }

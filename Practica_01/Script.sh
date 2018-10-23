@@ -55,12 +55,12 @@ else
 	# Le pasamos valores al modelo de MonteCarlo y recogemos la informacion en .dat
 	echo -e "${purple}Obteniendo datos del modelo de MonteCarlo...${nocolor}"
 
-	for ((N=0;N<101;N=N+1))
-	do
-		$ejecutables/MonteCarlo 100000 100 $N 0.9 0 >> $datos/MonteCarlo_Vista.dat
-		$ejecutables/MonteCarlo 100000 100 2 $N 1 >> $datos/MonteCarlo_Prob.dat
-		$ejecutables/MonteCarlo 100000 100 $N $N 1 >> $datos/MonteCarlo_VistaProb.dat
-	done
+	#for ((A=0;A<100;A=A+1))
+	#do
+	#	$ejecutables/MonteCarlo 100000 100 $A 0.9 0 >> $datos/MonteCarlo_Vista.dat
+	#	$ejecutables/MonteCarlo 100000 100 2 $A 1 >> $datos/MonteCarlo_Prob.dat
+	#	$ejecutables/MonteCarlo 100000 100 $A $A 1 >> $datos/MonteCarlo_VistaProb.dat
+	#done
 
 	echo -e "${purple}Finalizado${nocolor}"
 
@@ -69,16 +69,35 @@ else
 
 	numSimulaciones=(1 5 10 50 100 500 1000)
 	numRadares=5
-	numRepuestos=15
-	for N in "${numSimulaciones[@]}"
+	numRepuestos=$(( $numRadares * 3 ))
+	#for B in "${numSimulaciones[@]}"
+	#do
+	#	for ((C=0;C<numRepuestos;C=C+1))
+	#	do
+	#		$ejecutables/Discreto $numRadares $C 15 30 20 365 $B >> $datos/Discreto_RepFallos$B.dat
+	#	done
+	#	for ((D=0;D<366;D=D+1))
+	#	do
+	#		$ejecutables/Discreto $numRadares 1 15 30 $D 365 $B >> $datos/Discreto_RobFallos$B.dat
+	#	done
+	#done
+
+	echo -e "${purple}Finalizado${nocolor}"
+
+	# Le pasamos valores al modelo Continuo y recogemos la informacion en .dat
+	echo -e "${purple}Obteniendo datos del modelo Continuo...${nocolor}"
+
+	numDiasPesca=50
+	diasSimulacion=3650
+	numPecesGrandes=(1 10 100 1000 10000 100000 1000000)
+	porcentajePesca=(10 30 50 70 90)
+	for E in "${numPecesGrandes[@]}"
 	do
-		for ((M=0;M<numRepuestos;M=M+1))
+		numPecesPeq=$(( $E * 100 ))
+		$ejecutables/Continuo $diasSimulacion $numPecesPeq $E -1 0 >> $datos/Continuo_$E.dat
+		for F in "${porcentajePesca[@]}"
 		do
-			$ejecutables/Discreto $numRadares $M 15 30 20 365 $N >> $datos/Discreto_RepFallos$N.dat
-		done
-		for ((M=0;M<366;M=M+1))
-		do
-			$ejecutables/Discreto $numRadares 1 15 30 $M 365 $N >> $datos/Discreto_RobFallos$N.dat
+			$ejecutables/Continuo $diasSimulacion $numPecesPeq $E $numDiasPesca $F >> $datos/Continuo_$E$F.dat
 		done
 	done
 
@@ -101,10 +120,21 @@ else
 	gnuplot -e "plot '$datos/MonteCarlo_Prob.dat' using 4:6 title 'MonteCarlo - Parametro: Prob' with lines; set terminal png; set output '$graficas/MonteCarlo_Prob.png'; replot"
 	gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/MonteCarlo_VistaProb.dat' using 3:4:6 title 'MonteCarlo - Parametro: Vista y Prob' with lines; set terminal png; set output '$graficas/MonteCarlo_VistaProb.png'; replot"
 
-	for N in "${numSimulaciones[@]}"
+	for Z in "${numSimulaciones[@]}"
 	do
-		gnuplot -e "plot '$datos/Discreto_RepFallos$N.dat' using 1:2 title 'Discreto - Parametros: Repuestos y Media Fallos' with lines; set terminal png; set output '$graficas/Discreto_ResFallos$N.dat.png'; replot"
-		gnuplot -e "plot '$datos/Discreto_RobFallos$N.dat' using 3:2 title 'Discreto - Parametros: Robustez y Media Fallos' with lines; set terminal png; set output '$graficas/Discreto_RobFallos$N.dat.png'; replot"
+		gnuplot -e "plot '$datos/Discreto_RepFallos$Z.dat' using 1:2 title 'Discreto - Parametros: Repuestos y Media Fallos' with lines; set terminal png; set output '$graficas/Discreto_ResFallos$Z.dat.png'; replot"
+		gnuplot -e "plot '$datos/Discreto_RobFallos$Z.dat' using 3:2 title 'Discreto - Parametros: Robustez y Media Fallos' with lines; set terminal png; set output '$graficas/Discreto_RobFallos$Z.dat.png'; replot"
+	done
+
+	for Y in "${numPecesGrandes[@]}"
+	do
+		gnuplot -e "set logscale x; plot '$datos/Continuo_$Y.dat' using 1:2 title 'Continuo - Dias y Peces Pequeños' with lines; set terminal png; set output '$graficas/Continuo_P$Y.dat.png'; replot"
+		gnuplot -e "set logscale x; plot '$datos/Continuo_$Y.dat' using 1:3 title 'Continuo - Dias y Peces Grandes' with lines; set terminal png; set output '$graficas/Continuo_G$Y.dat.png'; replot"
+		for X in "${porcentajePesca[@]}"
+		do
+			gnuplot -e "set logscale x; plot '$datos/Continuo_$Y$X.dat' using 1:2 title 'Continuo - Dias y Peces Pequeños (Pesca)' with lines; set terminal png; set output '$graficas/Continuo_P$Y$X.dat.png'; replot"
+			gnuplot -e "set logscale x; plot '$datos/Continuo_$Y$X.dat' using 1:3 title 'Continuo - Dias y Peces Grandes (Pesca)' with lines; set terminal png; set output '$graficas/Continuo_G$Y$X.dat.png'; replot"
+		done
 	done
 
 	echo -e "${gray}Finalizado${nocolor}"

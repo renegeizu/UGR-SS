@@ -38,6 +38,11 @@ int main(int argc, char *argv[]){
 		sscanf(argv[3], "%ld",&vision);
 		sscanf(argv[4], "%f", &probOcupada);
 		sscanf(argv[5], "%d", &opcionProbabilidad);
+		if(probOcupada > 100){
+			probOcupada = 100;
+		}else if(probOcupada < 0){
+			probOcupada = 0;
+		}
 		if(opcionProbabilidad == 1){
 			probOcupada /= 100;
 		}
