@@ -47,7 +47,6 @@ else
 
 	# Compilamos todos los .cpp y .C
 	g++ -std=c++11 $1 $codigos/montecarlo_v1.cpp -o $ejecutables/MonteCarlo_V1
-	g++ -std=c++11 $1 $codigos/montecarlo_v2.cpp -o $ejecutables/MonteCarlo_V2
 
 	echo -e "${orange}Fin de la compilacion${nocolor}"
 

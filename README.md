@@ -12,3 +12,4 @@ Practica 01
 Practica 02
 --------------------
 + Modelo de MonteCarlo
++ Generadores de Datos
