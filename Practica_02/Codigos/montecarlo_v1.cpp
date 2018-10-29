@@ -6,9 +6,11 @@ using namespace std;
 
 #define graficar 1
 
-double desviacion = 0.0, ganancia = 0.0, ganancia_esperada = 0.0, mejor_desviacion = 0.0, mejor_ganancia = 0.0, sum = 0.0, sum_total = 0.0;
+double desviacion = 0.0, ganancia = 0.0, ganancia_esperada = 0.0, mejor_desviacion = 0.0, 
+	mejor_ganancia = 0.0, sum = 0.0, sum_total = 0.0;
 float *tabla_demanda;
-long demanda = 0, i = 0, num_apartado = 0, num_veces = 0, s = 0, tama = 100, valor_x = 0, valor_y = 0;
+int mejor_s = -1;
+long demanda = 0, i = 0, num_apartado = 0, num_veces = 0, s = 0, tama = 300, valor_x = 0, valor_y = 0;
 
 /**
   * @brief Genera un numero uniformemente distribuido en el intervalo [0,1)
@@ -125,6 +127,8 @@ int main(int argc, char *argv[]){
 		}
 	}
 	for(s = 0; s <= tama; s++){
+		sum = 0.0;
+		sum_total = 0.0;
 		for(i = 0; i < num_veces; i++){
 			demanda = genera_demanda(tabla_demanda, tama);
 			if(s > demanda){
@@ -143,10 +147,11 @@ int main(int argc, char *argv[]){
 		if(mejor_ganancia < ganancia_esperada){
 			mejor_ganancia = ganancia_esperada;
 			mejor_desviacion = desviacion;
+			mejor_s = s;
 		}
 	}
 	if(!graficar){
-		printf("Mayor Ganancia Esperada: %lf\tDesviacion: %lf\n", mejor_ganancia, mejor_desviacion);
+		printf("Mayor Ganancia Esperada: %lf\tDesviacion: %lf\tMejor S: %d\n", mejor_ganancia, mejor_desviacion, mejor_s);
 	}
 	return 0;
 }

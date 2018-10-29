@@ -84,8 +84,8 @@ else
 		for ((D=1;D<4;D=D+1))
 		do
 			gnuplot -e "plot '$datos/MonteCarlo_V1_X10Y1_$C$D.dat' using 1:2 title 'MonteCarlo_V1 - X(10) Y(1) - Veces: $C - Apartado $D' with lines; set terminal png; set output '$graficas/MonteCarlo_V1_X10Y1_$C.$D.png'; replot"
-			gnuplot -e "plot '$datos/MonteCarlo_V1_X10Y1_$C$D.dat' using 1:2 title 'MonteCarlo_V1 - X(10) Y(5) - Veces: $C - Apartado $D' with lines; set terminal png; set output '$graficas/MonteCarlo_V1_X10Y5_$C.$D.png'; replot"
-			gnuplot -e "plot '$datos/MonteCarlo_V1_X10Y1_$C$D.dat' using 1:2 title 'MonteCarlo_V1 - X(10) Y(10) - Veces: $C - Apartado $D' with lines; set terminal png; set output '$graficas/MonteCarlo_V1_X10Y10_$C.$D.png'; replot"
+			gnuplot -e "plot '$datos/MonteCarlo_V1_X10Y5_$C$D.dat' using 1:2 title 'MonteCarlo_V1 - X(10) Y(5) - Veces: $C - Apartado $D' with lines; set terminal png; set output '$graficas/MonteCarlo_V1_X10Y5_$C.$D.png'; replot"
+			gnuplot -e "plot '$datos/MonteCarlo_V1_X10Y10_$C$D.dat' using 1:2 title 'MonteCarlo_V1 - X(10) Y(10) - Veces: $C - Apartado $D' with lines; set terminal png; set output '$graficas/MonteCarlo_V1_X10Y10_$C.$D.png'; replot"
 		done
 	done
 
