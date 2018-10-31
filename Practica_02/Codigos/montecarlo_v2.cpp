@@ -10,7 +10,7 @@ double desviacion = 0.0, ganancia = 0.0, ganancia_esperada = 0.0, mejor_desviaci
 	mejor_ganancia = 0.0, sum = 0.0, sum_total = 0.0;
 float *tabla_demanda;
 int mejor_s = -1;
-long demanda = 0, i = 0, num_apartado = 0, num_veces = 0, s = 0, tama = 100, valor_x = 0, valor_y = 0;
+long demanda = 0, i = 0, num_apartado = 0, num_veces = 0, s = 0, tama = 100, valor_x = 0, valor_z = 0;
 
 /**
   * @brief Genera un numero uniformemente distribuido en el intervalo [0,1)
@@ -95,22 +95,22 @@ int genera_demanda(float *tabla, int tama){
 int main(int argc, char *argv[]){
 	if(argc == 1){
 		valor_x = 10;
-		valor_y = 1;
+		valor_z = 0;
 		num_veces = 100;
 	}else if(argc == 5){
 		sscanf(argv[1], "%ld", &valor_x);
-		sscanf(argv[2], "%ld", &valor_y);
+		sscanf(argv[2], "%ld", &valor_z);
 		sscanf(argv[3], "%ld", &num_veces);
 		sscanf(argv[4], "%ld", &num_apartado);
 	}else if(argc == 6){
 		sscanf(argv[1], "%ld", &valor_x);
-		sscanf(argv[2], "%ld", &valor_y);
+		sscanf(argv[2], "%ld", &valor_z);
 		sscanf(argv[3], "%ld", &num_veces);
 		sscanf(argv[4], "%ld", &num_apartado);
 		sscanf(argv[5], "%ld", &tama);
 	}else{
-		printf("\nFormato de 5 Argumentos: <Valor de X> <Valor de Y> <Numero de Veces> <Numero de Apartado>\n");
-		printf("\nFormato de 6 Argumentos: <Valor de X> <Valor de Y> <Numero de Veces> <Numero de Apartado> <Tamaño>\n");
+		printf("\nFormato de 5 Argumentos: <Valor de X> <Valor de Z> <Numero de Veces> <Numero de Apartado>\n");
+		printf("\nFormato de 6 Argumentos: <Valor de X> <Valor de Z> <Numero de Veces> <Numero de Apartado> <Tamaño>\n");
 		exit(1);
 	}
 	srand(time(NULL));
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]){
 		for(i = 0; i < num_veces; i++){
 			demanda = genera_demanda(tabla_demanda, tama);
 			if(s > demanda){
-				ganancia = demanda*valor_x-(s-demanda)*valor_y;
+				ganancia = demanda*valor_x-valor_z;
 			}else{
 				ganancia = s*valor_x;
 			}
