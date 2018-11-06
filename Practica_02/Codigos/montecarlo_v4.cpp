@@ -55,9 +55,8 @@ void rellenarVector(int* B, int N){
 void sumaIncremental(float* A, int N){
 	int i;
 	for(i = 1; i < N; i++){
-		A[i] = A[i]+A[i-1];
-		
-	}
+		A[i] = A[i-1]+A[i];
+	}	
 }
 
 /**
@@ -84,7 +83,7 @@ void ordenacionSeleccion(float* A, int* B, int N){
   */
 float* construye_prop_a(int n){
 	int i;
-	float *temp;
+	float* temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
 		fputs("Error reservando memoria para generador uniforme\n", stderr);
 		exit(1);
@@ -209,16 +208,21 @@ int genera_demanda(float *tabla, int tama){
 
 /**
   * @brief Genera un valor de la distribucion de la demanda codificada en tabla, por el metodo de
-  *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
+  *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular.
+  *        Usa la busqueda binaria.
   */
 int genera_demanda_orden(float* tabla, int* pos, int tama){
-	int i;
+	int a = tama-1, b = 0, c;
 	double u = uniforme();
-	i = 0;
-	while((i>=tama) && (u>=tabla[i])){
-		i++;
+	while(b <= a){
+		c = (a+b)/2;
+		if(u >= tabla[c]){
+			break;
+		}else if(u < tabla[c]){
+			a = c-1;
+		}
 	}
-	return pos[i];
+	return pos[c];
 }
 
 /**
