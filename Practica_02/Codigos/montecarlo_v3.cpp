@@ -10,8 +10,10 @@
 using namespace std;
 using namespace std::chrono;
 
+float* tablaS;
 double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
 long mediciones = 10000, tama = 100;
+multimap<float,int,greater<float>> tablaO;
 
 /**
   * @brief Genera un numero uniformemente distribuido en el intervalo [0,1)
@@ -157,7 +159,7 @@ int genera_demanda(float *tabla, int tama){
 	int i;
 	double u = uniforme();
 	i = 0;
-	while((i<tama) && (u>=tabla[i])){
+	while((i>=tama) && (u>=tabla[i])){
 		i++;
 	}
 	return i;
@@ -200,28 +202,34 @@ int main(int argc, char *argv[]){;
 	srand(time(NULL));
 	high_resolution_clock::time_point tIni, tFin;
 	for(int i = 0; i < mediciones; i++){
+		tablaS = construye_prop_a(tama);
 		tIni = high_resolution_clock::now();
-		genera_demanda(construye_prop_a(tama), tama);
+		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalAS += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tablaO = construye_prop_a_orden(tama);
 		tIni = high_resolution_clock::now();
-		genera_demanda_orden(construye_prop_a_orden(tama), tama);
+		genera_demanda_orden(tablaO, tama);
 		tFin = high_resolution_clock::now();
 		tTotalAO += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tablaS = construye_prop_b(tama);
 		tIni = high_resolution_clock::now();
-		genera_demanda(construye_prop_b(tama), tama);
+		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalBS += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tablaO = construye_prop_b_orden(tama);
 		tIni = high_resolution_clock::now();
-		genera_demanda_orden(construye_prop_b_orden(tama), tama);
+		genera_demanda_orden(tablaO, tama);
 		tFin = high_resolution_clock::now();
 		tTotalBO += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tablaS = construye_prop_c(tama);
 		tIni = high_resolution_clock::now();
-		genera_demanda(construye_prop_c(tama), tama);
+		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalCS += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tablaO = construye_prop_c_orden(tama);
 		tIni = high_resolution_clock::now();
-		genera_demanda_orden(construye_prop_c_orden(tama), tama);
+		genera_demanda_orden(tablaO, tama);
 		tFin = high_resolution_clock::now();
 		tTotalCO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
