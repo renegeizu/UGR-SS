@@ -25,7 +25,7 @@ double uniforme(){
 /**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado a)
   */
-float *construye_prop_a(int n){ //Ordenado Ascendente Automaticamente
+float *construye_prop_a(int n){
 	int i;
 	float *temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
@@ -42,7 +42,7 @@ float *construye_prop_a(int n){ //Ordenado Ascendente Automaticamente
 /**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado a)
   */
-multimap<float,int,greater<float>> construye_prop_a_orden(int n){ //Ordenado Usando Multimap (Decreciente)
+multimap<float,int,greater<float>> construye_prop_a_orden(int n){
 	int i;
 	multimap<float,int,greater<float>> temp, aux;
 	for(i = 0; i < n; i++){
@@ -64,7 +64,7 @@ multimap<float,int,greater<float>> construye_prop_a_orden(int n){ //Ordenado Usa
 /**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado b)
   */
-float* construye_prop_b(int n){ //Ordenado Ascendente Automaticamente
+float* construye_prop_b(int n){
 	int i, max;
 	float* temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
@@ -82,7 +82,7 @@ float* construye_prop_b(int n){ //Ordenado Ascendente Automaticamente
 /**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado b)
   */
-multimap<float,int,greater<float>> construye_prop_b_orden(int n){ //Ordenado Usando Multimap (Decreciente)
+multimap<float,int,greater<float>> construye_prop_b_orden(int n){
 	int i, max;
 	multimap<float,int,greater<float>> temp, aux;
 	max = (n/2)*(n+1);
@@ -127,7 +127,7 @@ float* construye_prop_c(int n){
 /**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado c)
   */
-multimap<float,int,greater<float>> construye_prop_c_orden(int n){ //Ordenado Usando Multimap (Decreciente)
+multimap<float,int,greater<float>> construye_prop_c_orden(int n){
 	int i, max;
 	multimap<float,int,greater<float>> temp, aux;
 	max = n*n/4;

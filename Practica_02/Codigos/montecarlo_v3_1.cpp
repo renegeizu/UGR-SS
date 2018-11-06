@@ -22,9 +22,66 @@ double uniforme(){
 }
 
 /**
+  * @brief Intercambia dos datos, de posicion, de un vector
+  */
+void intercambiarPos(int* B, int i, int j){
+	float tmp = B[i];
+	B[i] = B[j];
+	B[j] = tmp;
+}
+
+/**
+  * @brief Intercambia dos datos, de posicion, de un vector
+  */
+void intercambiarDato(float* A, int i, int j){
+	float tmp = A[i];
+	A[i] = A[j];
+	A[j] = tmp;
+}
+
+/**
+  * @brief Rellena el vector
+  */
+void rellenarVector(int* B, int N){
+	int i;
+	for(i = 0; i < N; i++){
+		B[i] = i;
+	}
+}
+
+/**
+  * @brief Suma incremental para la tabla
+  */
+void sumaIncremental(float* A, int N){
+	int i;
+	for(i = 1; i < N; i++){
+		A[i] += A[i-1];
+	}	
+}
+
+/**
+  * @brief Metodo de ordenacion por Seleccion
+  */
+void ordenacionSeleccion(float* A, int* B, int N){
+	int i, j, k;
+	for(i = 0; i < N - 1; i++){
+		for(k = i, j = i + 1; j < N; j++){
+			if(A[j] > A[k]){
+				k = j;
+			}
+		}
+		if(k != i){
+			intercambiarDato(A, i, k);
+			intercambiarPos(B, i, k);
+		}
+	}
+	sumaIncremental(A, N);
+}
+
+/**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado a)
   */
-float* construye_prop_a(int n){ //Ordenado Ascendente Automaticamente
+float* construye_prop_a(int n){
 	int i;
 	float *temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
@@ -39,9 +96,26 @@ float* construye_prop_a(int n){ //Ordenado Ascendente Automaticamente
 }
 
 /**
+  * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado a)
+  */
+float* construye_prop_a_orden(int n, int* pos){
+	int i;
+	float *temp;
+	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
+		fputs("Error reservando memoria para generador uniforme\n", stderr);
+		exit(1);
+	}
+	for(i = 0; i < n; i++){
+		temp[i] = 1.0/n;
+	}
+	ordenacionSeleccion(temp, pos, n);
+	return temp;
+}
+
+/**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado b)
   */
-float* construye_prop_b(int n){ //Ordenado Ascendente Automaticamente
+float* construye_prop_b(int n){
 	int i, max;
 	float* temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
@@ -53,6 +127,25 @@ float* construye_prop_b(int n){ //Ordenado Ascendente Automaticamente
 	for(i = 1; i < n; i++){
 		temp[i] = temp[i-1]+(float)(n-i)/max;
 	}
+	return temp;
+}
+
+/**
+  * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado b)
+  */
+float* construye_prop_b_orden(int n, int* pos){
+	int i, max;
+	float* temp;
+	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
+		fputs("Error reservando memoria para generador proporcional\n", stderr);
+		exit(1);
+	}
+	max = (n/2)*(n+1);
+	temp[0] = n*1.0/max;
+	for(i = 1; i < n; i++){
+		temp[i] = (float)(n-i)/max;
+	}
+	ordenacionSeleccion(temp, pos, n);
 	return temp;
 }
 
@@ -74,6 +167,28 @@ float* construye_prop_c(int n){
 	for(i = (n/2); i < n; i++){
 		temp[i] = temp[i-1]+(float)(n-i)/max;
 	}
+	return temp;
+}
+
+/**
+  * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado c)
+  */
+float* construye_prop_c_orden(int n, int* pos){
+	int i, max;
+	float *temp;
+	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
+		fputs("Error reservando memoria para generador triangular\n",stderr);
+		exit(1);
+	}
+	max = n*n/4;
+	temp[0] = 0.0;
+	for(i = 1; i < (n/2); i++){
+		temp[i] = (float)i/max;
+	}
+	for(i = (n/2); i < n; i++){
+		temp[i] = (float)(n-i)/max;
+	}
+	ordenacionSeleccion(temp, pos, n);
 	return temp;
 }
 
@@ -106,52 +221,6 @@ int genera_demanda_orden(float* tabla, int* pos, int tama){
 }
 
 /**
-  * @brief Intercambia dos datos, de posicion, de un vector
-  */
-void intercambiarDato(float* A, int i, int j){
-	float tmp = A[i];
-	A[i] = A[j];
-	A[j] = tmp;
-}
-
-/**
-  * @brief Intercambia dos datos, de posicion, de un vector
-  */
-void intercambiarPos(int* B, int i, int j){
-	float tmp = B[i];
-	B[i] = B[j];
-	B[j] = tmp;
-}
-
-/**
-  * @brief Rellena el vector
-  */
-void rellenarVector(int* B, int N){
-	int i;
-	for(i = 0; i < N; i++){
-		B[i] = i;
-	}
-}
-
-/**
-  * @brief Metodo de ordenacion por Seleccion
-  */
-void ordenacionSeleccion(float* A, int* B, int N){
-	int i, j, k;
-	for(i = 0; i < N - 1; i++){
-		for(k = i, j = i + 1; j < N; j++){
-			if(A[j] < A[k]){
-				k = j;
-			}
-		}
-		if(k != i){
-			intercambiarDato(A, i, k);
-			intercambiarPos(B, i, k);
-		}
-	}
-}
-
-/**
   * @brief Funcion Principal
   */
 int main(int argc, char *argv[]){;
@@ -180,8 +249,7 @@ int main(int argc, char *argv[]){;
 		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalAS += (duration_cast<duration<double>>(tFin-tIni)).count();		
-		tablaS = construye_prop_a(tama);
-		ordenacionSeleccion(tablaS, posicion, tama);
+		tablaS = construye_prop_a_orden(tama, posicion);
 		tIni = high_resolution_clock::now();
 		genera_demanda_orden(tablaS, posicion, tama);
 		tFin = high_resolution_clock::now();
@@ -191,8 +259,7 @@ int main(int argc, char *argv[]){;
 		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalBS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaS = construye_prop_b(tama);
-		ordenacionSeleccion(tablaS, posicion, tama);
+		tablaS = construye_prop_b_orden(tama, posicion);
 		tIni = high_resolution_clock::now();
 		genera_demanda_orden(tablaS, posicion, tama);
 		tFin = high_resolution_clock::now();
@@ -202,8 +269,7 @@ int main(int argc, char *argv[]){;
 		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalCS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaS = construye_prop_c(tama);
-		ordenacionSeleccion(tablaS, posicion, tama);
+		tablaS = construye_prop_c_orden(tama, posicion);
 		tIni = high_resolution_clock::now();
 		genera_demanda_orden(tablaS, posicion, tama);
 		tFin = high_resolution_clock::now();
