@@ -1,3 +1,5 @@
+//Ejercicio 1.3 - Modelizacion por Monte Carlo
+
 #include <cmath>
 #include <iostream>
 #include <stdlib.h>
@@ -8,7 +10,7 @@ using namespace std;
 
 double desviacion = 0.0, ganancia = 0.0, ganancia_esperada = 0.0, mejor_desviacion = 0.0, 
 	mejor_ganancia = 0.0, sum = 0.0, sum_total = 0.0;
-float *tabla_demanda;
+float* tabla_demanda;
 int mejor_s = -1;
 long demanda = 0, i = 0, num_apartado = 0, num_veces = 0, s = 0, tama = 100, valor_x = 0, valor_y = 0;
 
@@ -22,9 +24,9 @@ double uniforme(){
 /**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado a)
   */
-float *construye_prop_a(int n){
+float* construye_prop_a(int n){
 	int i;
-	float *temp;
+	float* temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
 		fputs("Error reservando memoria para generador uniforme\n", stderr);
 		exit(1);
@@ -39,9 +41,9 @@ float *construye_prop_a(int n){
 /**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado b)
   */
-float *construye_prop_b(int n){
+float* construye_prop_b(int n){
 	int i, max;
-	float *temp;
+	float* temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
 		fputs("Error reservando memoria para generador proporcional\n", stderr);
 		exit(1);
@@ -57,9 +59,9 @@ float *construye_prop_b(int n){
 /**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado c)
   */
-float *construye_prop_c(int n){
+float* construye_prop_c(int n){
 	int i, max;
-	float *temp;
+	float* temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
 		fputs("Error reservando memoria para generador triangular\n",stderr);
 		exit(1);
@@ -97,6 +99,7 @@ int main(int argc, char *argv[]){
 		valor_x = 10;
 		valor_y = 1;
 		num_veces = 100;
+		num_apartado = 1;
 	}else if(argc == 5){
 		sscanf(argv[1], "%ld", &valor_x);
 		sscanf(argv[2], "%ld", &valor_y);
