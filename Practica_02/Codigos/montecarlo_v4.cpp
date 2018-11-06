@@ -12,7 +12,7 @@ using namespace std::chrono;
 double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
 float* tablaS;
 int* posicion;
-long mediciones = 10000, tama = 100;
+long mediciones = 100, tama = 1000;
 
 /**
   * @brief Genera un numero uniformemente distribuido en el intervalo [0,1)
@@ -55,8 +55,9 @@ void rellenarVector(int* B, int N){
 void sumaIncremental(float* A, int N){
 	int i;
 	for(i = 1; i < N; i++){
-		A[i] = A[i-1]+A[i];
-	}	
+		A[i] = A[i]+A[i-1];
+		
+	}
 }
 
 /**
@@ -83,7 +84,7 @@ void ordenacionSeleccion(float* A, int* B, int N){
   */
 float* construye_prop_a(int n){
 	int i;
-	float* temp;
+	float *temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
 		fputs("Error reservando memoria para generador uniforme\n", stderr);
 		exit(1);
@@ -208,21 +209,30 @@ int genera_demanda(float *tabla, int tama){
 
 /**
   * @brief Genera un valor de la distribucion de la demanda codificada en tabla, por el metodo de
-  *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular.
-  *        Usa la busqueda binaria.
+  *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
   */
 int genera_demanda_orden(float* tabla, int* pos, int tama){
-	int a = tama-1, b = 0, c;
-	double u = uniforme();
-	while(b <= a){
-		c = (a+b)/2;
-		if(u >= tabla[c]){
-			break;
-		}else if(u < tabla[c]){
-			a = c-1;
+	double u = uniforme(), comparador = 1.0/tama, valor;
+	int derecha = tama-1, izquierda = 0, centro;
+	if(tama == 1){
+		if(abs(tabla[0]-u) <  comparador){
+			return pos[0];
+		}else{
+			return -1;
+		}
+	}else{
+		while(izquierda <= derecha){
+			centro = (derecha+izquierda)/2;
+			valor = abs(tabla[centro]-u);
+			if(valor <  comparador){
+				return pos[centro];			
+			}else if(u >= tabla[centro]){
+				izquierda = centro+1;
+			}else{
+				derecha = centro-1;
+			}
 		}
 	}
-	return pos[c];
 }
 
 /**
@@ -230,8 +240,8 @@ int genera_demanda_orden(float* tabla, int* pos, int tama){
   */
 int main(int argc, char *argv[]){;
 	if(argc == 1){
-		mediciones = 10000;
-		tama = 100;
+		mediciones = 100;
+		tama = 1000;
 	}else if(argc == 2){
 		sscanf(argv[1], "%ld", &mediciones);
 	}else if(argc == 3){

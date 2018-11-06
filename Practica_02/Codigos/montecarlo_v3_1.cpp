@@ -12,7 +12,7 @@ using namespace std::chrono;
 double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
 float* tablaS;
 int* posicion;
-long mediciones = 10000, tama = 100;
+long mediciones = 100, tama = 10000;
 
 /**
   * @brief Genera un numero uniformemente distribuido en el intervalo [0,1)
@@ -226,8 +226,8 @@ int genera_demanda_orden(float* tabla, int* pos, int tama){
   */
 int main(int argc, char *argv[]){;
 	if(argc == 1){
-		mediciones = 10000;
-		tama = 100;
+		mediciones = 100;
+		tama = 10000;
 	}else if(argc == 2){
 		sscanf(argv[1], "%ld", &mediciones);
 	}else if(argc == 3){

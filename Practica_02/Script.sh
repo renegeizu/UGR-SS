@@ -62,6 +62,7 @@ else
 	g++ -std=c++11 $1 $codigos/montecarlo_v2.cpp -o $ejecutables/MonteCarlo_V2
 	g++ -std=c++11 $1 $codigos/montecarlo_v3.cpp -o $ejecutables/MonteCarlo_V3
 	g++ -std=c++11 $1 $codigos/montecarlo_v3_1.cpp -o $ejecutables/MonteCarlo_V3_1
+	g++ -std=c++11 $1 $codigos/montecarlo_v4.cpp -o $ejecutables/MonteCarlo_V4
 
 	echo -e "${orange}Fin de la compilacion${nocolor}"
 
@@ -88,8 +89,9 @@ else
 	# Le pasamos valores al modelo de MonteCarlo y recogemos la informacion en .dat
 	echo -e "${purple}Obteniendo datos del modelo de MonteCarlo V3...${nocolor}"
 
-	$ejecutables/MonteCarlo_V3 10000 100 >> $datos/V3/ComparacionTiempos_V3.dat
-	$ejecutables/MonteCarlo_V3_1 10000 100 >> $datos/V3/ComparacionTiempos_V3_1.dat
+	$ejecutables/MonteCarlo_V3 100 100000 >> $datos/V3/ComparacionTiempos_V3.dat
+	$ejecutables/MonteCarlo_V3_1 100 10000 >> $datos/V3/ComparacionTiempos_V3_1.dat
+	$ejecutables/MonteCarlo_V4 100 1000 >> $datos/V3/ComparacionTiempos_V4.dat
 
 	echo -e "${purple}Finalizado${nocolor}"
 

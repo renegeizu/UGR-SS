@@ -12,7 +12,7 @@ using namespace std::chrono;
 
 float* tablaS;
 double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
-long mediciones = 10000, tama = 100;
+long mediciones = 100, tama = 100000;
 multimap<float,int,greater<float>> tablaO;
 
 /**
@@ -187,8 +187,8 @@ int genera_demanda_orden(multimap<float,int,greater<float>> tabla, int tama){
   */
 int main(int argc, char *argv[]){;
 	if(argc == 1){
-		mediciones = 10000;
-		tama = 100;
+		mediciones = 100;
+		tama = 100000;
 	}else if(argc == 2){
 		sscanf(argv[1], "%ld", &mediciones);
 	}else if(argc == 3){
