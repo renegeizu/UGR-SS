@@ -42,6 +42,8 @@ else
 		echo -e "${blue}Directorio 'Datos/V1' listo${nocolor}"
 		mkdir $datos/V2
 		echo -e "${blue}Directorio 'Datos/V2' listo${nocolor}"
+		mkdir $datos/V3
+		echo -e "${blue}Directorio 'Datos/V3' listo${nocolor}"
 	else
 		mkdir $datos
 		echo -e "${blue}Directorio 'Datos' creado${nocolor}"
@@ -49,6 +51,8 @@ else
 		echo -e "${blue}Directorio 'Datos/V1' creado${nocolor}"
 		mkdir $datos/V2
 		echo -e "${blue}Directorio 'Datos/V2' creado${nocolor}"
+		mkdir $datos/V3
+		echo -e "${blue}Directorio 'Datos/V3' listo${nocolor}"
 	fi
 
 	echo -e "${orange}Compilando codigos...${nocolor}"
@@ -56,6 +60,7 @@ else
 	# Compilamos todos los .cpp y .C
 	g++ -std=c++11 $1 $codigos/montecarlo_v1.cpp -o $ejecutables/MonteCarlo_V1
 	g++ -std=c++11 $1 $codigos/montecarlo_v2.cpp -o $ejecutables/MonteCarlo_V2
+	g++ -std=c++11 $1 $codigos/montecarlo_v3.cpp -o $ejecutables/MonteCarlo_V3
 
 	echo -e "${orange}Fin de la compilacion${nocolor}"
 
@@ -76,6 +81,13 @@ else
 			$ejecutables/MonteCarlo_V2 10 10 $A $B >> $datos/V2/MonteCarlo_V2_X10Y10_$A-$B.dat
 		done
 	done
+
+	echo -e "${purple}Finalizado${nocolor}"
+
+	# Le pasamos valores al modelo de MonteCarlo y recogemos la informacion en .dat
+	echo -e "${purple}Obteniendo datos del modelo de MonteCarlo V1 y V2...${nocolor}"
+
+	$ejecutables/MonteCarlo_V3 10000 100 >> $datos/V3/ComparacionTiempos.dat
 
 	echo -e "${purple}Finalizado${nocolor}"
 

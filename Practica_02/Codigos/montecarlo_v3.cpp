@@ -8,8 +8,10 @@
 #include <stdlib.h>
 
 using namespace std;
+using namespace std::chrono;
 
-long mediciones = 10;
+double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
+long mediciones = 10000, tama = 100;
 
 /**
   * @brief Genera un numero uniformemente distribuido en el intervalo [0,1)
@@ -162,20 +164,72 @@ int genera_demanda(float *tabla, int tama){
 }
 
 /**
+  * @brief Genera un valor de la distribucion de la demanda codificada en tabla, por el metodo de
+  *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
+  */
+int genera_demanda_orden(multimap<float,int,greater<float>> tabla, int tama){
+	int i;
+	double u = uniforme();
+	i = 0;
+	for (multimap<float,int>::iterator it = tabla.begin(); it != tabla.end(); ++it){
+		if(u >= it->first){
+			it = --(tabla.end());
+		}
+		i++;
+	}
+	return i;
+}
+
+/**
   * @brief Funcion Principal
   */
 int main(int argc, char *argv[]){;
 	if(argc == 1){
-		mediciones = 10;
+		mediciones = 10000;
+		tama = 100;
 	}else if(argc == 2){
 		sscanf(argv[1], "%ld", &mediciones);
+	}else if(argc == 3){
+		sscanf(argv[1], "%ld", &mediciones);
+		sscanf(argv[2], "%ld", &tama);
 	}else{
 		printf("\nFormato de 1 Argumento: <Numero Mediciones>\n");
+		printf("\nFormato de 2 Argumento: <Numero Mediciones> <Tamaño>\n");
 		exit(1);
 	}
 	srand(time(NULL));
-
-	//Mediciones y Printar resultados
-
+	high_resolution_clock::time_point tIni, tFin;
+	for(int i = 0; i < mediciones; i++){
+		tIni = high_resolution_clock::now();
+		genera_demanda(construye_prop_a(tama), tama);
+		tFin = high_resolution_clock::now();
+		tTotalAS += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tIni = high_resolution_clock::now();
+		genera_demanda_orden(construye_prop_a_orden(tama), tama);
+		tFin = high_resolution_clock::now();
+		tTotalAO += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tIni = high_resolution_clock::now();
+		genera_demanda(construye_prop_b(tama), tama);
+		tFin = high_resolution_clock::now();
+		tTotalBS += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tIni = high_resolution_clock::now();
+		genera_demanda_orden(construye_prop_b_orden(tama), tama);
+		tFin = high_resolution_clock::now();
+		tTotalBO += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tIni = high_resolution_clock::now();
+		genera_demanda(construye_prop_c(tama), tama);
+		tFin = high_resolution_clock::now();
+		tTotalCS += (duration_cast<duration<double>>(tFin-tIni)).count();
+		tIni = high_resolution_clock::now();
+		genera_demanda_orden(construye_prop_c_orden(tama), tama);
+		tFin = high_resolution_clock::now();
+		tTotalCO += (duration_cast<duration<double>>(tFin-tIni)).count();
+	}
+	cout << "Tabla Busqueda A - Sin Ordenar: " << (double)tTotalAS/mediciones << endl;
+	cout << "Tabla Busqueda A - Ordenada   : " << (double)tTotalAO/mediciones << endl;
+	cout << "Tabla Busqueda B - Sin Ordenar: " << (double)tTotalBS/mediciones << endl;
+	cout << "Tabla Busqueda B - Ordenada   : " << (double)tTotalBO/mediciones << endl;
+	cout << "Tabla Busqueda C - Sin Ordenar: " << (double)tTotalCS/mediciones << endl;
+	cout << "Tabla Busqueda C - Ordenada   : " << (double)tTotalCO/mediciones << endl;
 	return 0;
 }
