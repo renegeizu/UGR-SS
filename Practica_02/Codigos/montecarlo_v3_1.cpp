@@ -4,16 +4,15 @@
 #include <chrono>
 #include <ctime>
 #include <iostream>
-#include <map>
 #include <stdlib.h>
 
 using namespace std;
 using namespace std::chrono;
 
-float* tablaS;
 double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
+float* tablaS;
+int* posicion;
 long mediciones = 10000, tama = 100;
-multimap<float,int,greater<float>> tablaO;
 
 /**
   * @brief Genera un numero uniformemente distribuido en el intervalo [0,1)
@@ -25,7 +24,7 @@ double uniforme(){
 /**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado a)
   */
-float *construye_prop_a(int n){ //Ordenado Ascendente Automaticamente
+float* construye_prop_a(int n){ //Ordenado Ascendente Automaticamente
 	int i;
 	float *temp;
 	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
@@ -37,28 +36,6 @@ float *construye_prop_a(int n){ //Ordenado Ascendente Automaticamente
 		temp[i] = temp[i-1]+1.0/n;
 	}
 	return temp;
-}
-
-/**
-  * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado a)
-  */
-multimap<float,int,greater<float>> construye_prop_a_orden(int n){ //Ordenado Usando Multimap (Decreciente)
-	int i;
-	multimap<float,int,greater<float>> temp, aux;
-	for(i = 0; i < n; i++){
-		temp.insert(pair<float,int>((float)1.0/n,i));
-	}
-	pair<float,int> par;
-	for (multimap<float,int>::iterator it = temp.begin(); it != temp.end(); ++it){
-		if(it != temp.begin()){
-			par = make_pair(par.first+it->first,it->second);
-			aux.insert(par);
-		}else{
-			par = make_pair(it->first,it->second);
-			aux.insert(par);
-		}
-	}
-	return aux;
 }
 
 /**
@@ -77,30 +54,6 @@ float* construye_prop_b(int n){ //Ordenado Ascendente Automaticamente
 		temp[i] = temp[i-1]+(float)(n-i)/max;
 	}
 	return temp;
-}
-
-/**
-  * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado b)
-  */
-multimap<float,int,greater<float>> construye_prop_b_orden(int n){ //Ordenado Usando Multimap (Decreciente)
-	int i, max;
-	multimap<float,int,greater<float>> temp, aux;
-	max = (n/2)*(n+1);
-	temp.insert(pair<float,int>(n*1.0/max,0));
-	for(i = 1; i < n; i++){
-		temp.insert(pair<float,int>((float)(n-i)/max,i));
-	}
-	pair<float,int> par;
-	for (multimap<float,int>::iterator it = temp.begin(); it != temp.end(); ++it){
-		if(it != temp.begin()){
-			par = make_pair(par.first+it->first,it->second);
-			aux.insert(par);
-		}else{
-			par = make_pair(it->first,it->second);
-			aux.insert(par);
-		}
-	}
-	return aux;
 }
 
 /**
@@ -125,33 +78,6 @@ float* construye_prop_c(int n){
 }
 
 /**
-  * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado c)
-  */
-multimap<float,int,greater<float>> construye_prop_c_orden(int n){ //Ordenado Usando Multimap (Decreciente)
-	int i, max;
-	multimap<float,int,greater<float>> temp, aux;
-	max = n*n/4;
-	temp.insert(pair<float,int>((float)0.0,0));
-	for(i = 1; i < (n/2); i++){
-		temp.insert(pair<float,int>((float)i/max,i));
-	}
-	for(i = (n/2); i < n; i++){
-		temp.insert(pair<float,int>((float)(n-i)/max,i));
-	}
-	pair<float,int> par;
-	for (multimap<float,int>::iterator it = temp.begin(); it != temp.end(); ++it){
-		if(it != temp.begin()){
-			par = make_pair(par.first+it->first,it->second);
-			aux.insert(par);
-		}else{
-			par = make_pair(it->first,it->second);
-			aux.insert(par);
-		}
-	}
-	return aux;
-}
-
-/**
   * @brief Genera un valor de la distribucion de la demanda codificada en tabla, por el metodo de
   *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
   */
@@ -169,17 +95,60 @@ int genera_demanda(float *tabla, int tama){
   * @brief Genera un valor de la distribucion de la demanda codificada en tabla, por el metodo de
   *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
   */
-int genera_demanda_orden(multimap<float,int,greater<float>> tabla, int tama){
+int genera_demanda_orden(float* tabla, int* pos, int tama){
 	int i;
 	double u = uniforme();
 	i = 0;
-	for (multimap<float,int>::iterator it = tabla.begin(); it != tabla.end(); ++it){
-		if(u >= it->first){
-			it = --(tabla.end());
-		}
+	while((i>=tama) && (u>=tabla[i])){
 		i++;
 	}
-	return i;
+	return pos[i];
+}
+
+/**
+  * @brief Intercambia dos datos, de posicion, de un vector
+  */
+void intercambiarDato(float* A, int i, int j){
+	float tmp = A[i];
+	A[i] = A[j];
+	A[j] = tmp;
+}
+
+/**
+  * @brief Intercambia dos datos, de posicion, de un vector
+  */
+void intercambiarPos(int* B, int i, int j){
+	float tmp = B[i];
+	B[i] = B[j];
+	B[j] = tmp;
+}
+
+/**
+  * @brief Rellena el vector
+  */
+void rellenarVector(int* B, int N){
+	int i;
+	for(i = 0; i < N; i++){
+		B[i] = i;
+	}
+}
+
+/**
+  * @brief Metodo de ordenacion por Seleccion
+  */
+void ordenacionSeleccion(float* A, int* B, int N){
+	int i, j, k;
+	for(i = 0; i < N - 1; i++){
+		for(k = i, j = i + 1; j < N; j++){
+			if(A[j] < A[k]){
+				k = j;
+			}
+		}
+		if(k != i){
+			intercambiarDato(A, i, k);
+			intercambiarPos(B, i, k);
+		}
+	}
 }
 
 /**
@@ -199,6 +168,10 @@ int main(int argc, char *argv[]){;
 		printf("\nFormato de 2 Argumento: <Numero Mediciones> <Tamaño>\n");
 		exit(1);
 	}
+	if((posicion = (int*) malloc(tama*sizeof(int))) == NULL){
+		fputs("Error reservando memoria para vector\n",stderr);
+		exit(1);
+	}
 	srand(time(NULL));
 	high_resolution_clock::time_point tIni, tFin;
 	for(int i = 0; i < mediciones; i++){
@@ -206,10 +179,11 @@ int main(int argc, char *argv[]){;
 		tIni = high_resolution_clock::now();
 		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
-		tTotalAS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaO = construye_prop_a_orden(tama);
+		tTotalAS += (duration_cast<duration<double>>(tFin-tIni)).count();		
+		tablaS = construye_prop_a(tama);
+		ordenacionSeleccion(tablaS, posicion, tama);
 		tIni = high_resolution_clock::now();
-		genera_demanda_orden(tablaO, tama);
+		genera_demanda_orden(tablaS, posicion, tama);
 		tFin = high_resolution_clock::now();
 		tTotalAO += (duration_cast<duration<double>>(tFin-tIni)).count();
 		tablaS = construye_prop_b(tama);
@@ -217,9 +191,10 @@ int main(int argc, char *argv[]){;
 		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalBS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaO = construye_prop_b_orden(tama);
+		tablaS = construye_prop_b(tama);
+		ordenacionSeleccion(tablaS, posicion, tama);
 		tIni = high_resolution_clock::now();
-		genera_demanda_orden(tablaO, tama);
+		genera_demanda_orden(tablaS, posicion, tama);
 		tFin = high_resolution_clock::now();
 		tTotalBO += (duration_cast<duration<double>>(tFin-tIni)).count();
 		tablaS = construye_prop_c(tama);
@@ -227,9 +202,10 @@ int main(int argc, char *argv[]){;
 		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalCS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaO = construye_prop_c_orden(tama);
+		tablaS = construye_prop_c(tama);
+		ordenacionSeleccion(tablaS, posicion, tama);
 		tIni = high_resolution_clock::now();
-		genera_demanda_orden(tablaO, tama);
+		genera_demanda_orden(tablaS, posicion, tama);
 		tFin = high_resolution_clock::now();
 		tTotalCO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
