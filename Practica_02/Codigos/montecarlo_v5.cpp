@@ -1,4 +1,4 @@
-//Ejercicio 2.1 - Mejorando los Generadores - Parte 02
+//Ejercicio 2.1 - Mejorando los Generadores - Parte 03
 
 #include <cmath>
 #include <chrono>
@@ -12,7 +12,7 @@ using namespace std::chrono;
 double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
 float* tablaS;
 int* posicion;
-long mediciones = 100, tama = 1000;
+long mediciones = 100, tama = 10000;
 
 /**
   * @brief Genera un numero uniformemente distribuido en el intervalo [0,1)
@@ -92,9 +92,6 @@ float* construye_prop_a(int n){
 	temp[0] = 1.0/n;
 	for(i = 1; i < n; i++){
 		temp[i] = temp[i-1]+1.0/n;
-	}
-	for(i = 0; i < n; i++){
-		cout << "Valor: " << temp[i] << endl;
 	}
 	return temp;
 }
@@ -198,17 +195,12 @@ float* construye_prop_c_orden(int n, int* pos){
 
 /**
   * @brief Genera un valor de la distribucion de la demanda codificada en tabla, por el metodo de
-  *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
+  *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular. Como
+  *		 el incremento es costante, podemos multiplicar el dato por el tamaño y redondear al alza
+  *		 para obtener la posicion
   */
 int genera_demanda(float *tabla, int tama){
-	int i;
-	double u = uniforme();
-	cout << u << endl;
-	i = 0;
-	while((i>=tama) && (u>=tabla[i])){
-		i++;
-	}
-	return i;
+	return ceil((double)uniforme()*tama);
 }
 
 /**
@@ -216,27 +208,7 @@ int genera_demanda(float *tabla, int tama){
   *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
   */
 int genera_demanda_orden(float* tabla, int* pos, int tama){
-	double u = uniforme(), comparador = 1.0/tama, valor;
-	int derecha = tama-1, izquierda = 0, centro;
-	if(tama == 1){
-		if(abs(tabla[0]-u) <  comparador){
-			return pos[0];
-		}else{
-			return -1;
-		}
-	}else{
-		while(izquierda <= derecha){
-			centro = (derecha+izquierda)/2;
-			valor = abs(tabla[centro]-u);
-			if(valor <  comparador){
-				return pos[centro];			
-			}else if(u >= tabla[centro]){
-				izquierda = centro+1;
-			}else{
-				derecha = centro-1;
-			}
-		}
-	}
+	return ceil((double)uniforme()*tama);
 }
 
 /**
@@ -245,7 +217,7 @@ int genera_demanda_orden(float* tabla, int* pos, int tama){
 int main(int argc, char *argv[]){;
 	if(argc == 1){
 		mediciones = 100;
-		tama = 1000;
+		tama = 10000;
 	}else if(argc == 2){
 		sscanf(argv[1], "%ld", &mediciones);
 	}else if(argc == 3){
@@ -268,37 +240,13 @@ int main(int argc, char *argv[]){;
 		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalAS += (duration_cast<duration<double>>(tFin-tIni)).count();		
-		/*tablaS = construye_prop_a_orden(tama, posicion);
+		tablaS = construye_prop_a_orden(tama, posicion);
 		tIni = high_resolution_clock::now();
 		genera_demanda_orden(tablaS, posicion, tama);
 		tFin = high_resolution_clock::now();
 		tTotalAO += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaS = construye_prop_b(tama);
-		tIni = high_resolution_clock::now();
-		genera_demanda(tablaS, tama);
-		tFin = high_resolution_clock::now();
-		tTotalBS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaS = construye_prop_b_orden(tama, posicion);
-		tIni = high_resolution_clock::now();
-		genera_demanda_orden(tablaS, posicion, tama);
-		tFin = high_resolution_clock::now();
-		tTotalBO += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaS = construye_prop_c(tama);
-		tIni = high_resolution_clock::now();
-		genera_demanda(tablaS, tama);
-		tFin = high_resolution_clock::now();
-		tTotalCS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaS = construye_prop_c_orden(tama, posicion);
-		tIni = high_resolution_clock::now();
-		genera_demanda_orden(tablaS, posicion, tama);
-		tFin = high_resolution_clock::now();
-		tTotalCO += (duration_cast<duration<double>>(tFin-tIni)).count();*/
 	}
 	cout << "Tabla Busqueda A - Sin Ordenar: " << (double)tTotalAS/mediciones << endl;
 	cout << "Tabla Busqueda A - Ordenada   : " << (double)tTotalAO/mediciones << endl;
-	cout << "Tabla Busqueda B - Sin Ordenar: " << (double)tTotalBS/mediciones << endl;
-	cout << "Tabla Busqueda B - Ordenada   : " << (double)tTotalBO/mediciones << endl;
-	cout << "Tabla Busqueda C - Sin Ordenar: " << (double)tTotalCS/mediciones << endl;
-	cout << "Tabla Busqueda C - Ordenada   : " << (double)tTotalCO/mediciones << endl;
 	return 0;
 }
