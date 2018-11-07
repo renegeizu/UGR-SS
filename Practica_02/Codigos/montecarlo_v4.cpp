@@ -93,9 +93,6 @@ float* construye_prop_a(int n){
 	for(i = 1; i < n; i++){
 		temp[i] = temp[i-1]+1.0/n;
 	}
-	for(i = 0; i < n; i++){
-		cout << "Valor: " << temp[i] << endl;
-	}
 	return temp;
 }
 
@@ -167,7 +164,6 @@ float* construye_prop_c_orden(int n, int* pos){
 int genera_demanda(float *tabla, int tama){
 	int i;
 	double u = uniforme();
-	cout << u << endl;
 	i = 0;
 	while((i>=tama) && (u>=tabla[i])){
 		i++;
@@ -324,11 +320,11 @@ int main(int argc, char *argv[]){;
 		tFin = high_resolution_clock::now();
 		tTotalCO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	cout << "Tabla Busqueda A - Normal\t" << (double)tTotalAS/mediciones << endl;
-	cout << "Tabla Busqueda A - BS\t" << (double)tTotalAO/mediciones << endl;
-	cout << "Tabla Busqueda B - Normal\t" << (double)tTotalBS/mediciones << endl;
-	cout << "Tabla Busqueda B - BS\t" << (double)tTotalBO/mediciones << endl;
-	cout << "Tabla Busqueda C - Normal Ordenada\t" << (double)tTotalCS/mediciones << endl;
-	cout << "Tabla Busqueda C - BS\t" << (double)tTotalCO/mediciones << endl;
+	cout << "A_Norm\t" << (double)tTotalAS/mediciones << endl;
+	cout << "A_BS\t" << (double)tTotalAO/mediciones << endl;
+	cout << "B_Norm\t" << (double)tTotalBS/mediciones << endl;
+	cout << "B_BS\t" << (double)tTotalBO/mediciones << endl;
+	cout << "C_NormOrden\t" << (double)tTotalCS/mediciones << endl;
+	cout << "C_BS\t" << (double)tTotalCO/mediciones << endl;
 	return 0;
 }

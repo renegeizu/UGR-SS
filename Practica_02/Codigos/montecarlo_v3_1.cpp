@@ -222,7 +222,7 @@ int main(int argc, char *argv[]){;
 		tFin = high_resolution_clock::now();
 		tTotalCO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	cout << "Tabla Busqueda C - Sin Ordenar\t" << (double)tTotalCS/mediciones << endl;
-	cout << "Tabla Busqueda C - Ordenada\t" << (double)tTotalCO/mediciones << endl;
+	cout << "C_SinOrden\t" << (double)tTotalCS/mediciones << endl;
+	cout << "C_Orden\t" << (double)tTotalCO/mediciones << endl;
 	return 0;
 }
