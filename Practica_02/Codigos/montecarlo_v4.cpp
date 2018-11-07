@@ -232,6 +232,34 @@ int genera_demanda_BS(float* tabla, int tama){
 }
 
 /**
+  * @brief Genera un valor de la distribucion de la demanda codificada en tabla, por el metodo de
+  *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
+  */
+int genera_demanda_BS(float* tabla, int* pos, int tama){
+	double u = uniforme(), comparador = 1.0/tama, valor;
+	int derecha = tama-1, izquierda = 0, centro;
+	if(tama == 1){
+		if(abs(tabla[0]-u) <  comparador){
+			return pos[0];
+		}else{
+			return -1;
+		}
+	}else{
+		while(izquierda <= derecha){
+			centro = (derecha+izquierda)/2;
+			valor = abs(tabla[centro]-u);
+			if(valor <  comparador){
+				return pos[centro];			
+			}else if(u >= tabla[centro]){
+				izquierda = centro+1;
+			}else{
+				derecha = centro-1;
+			}
+		}
+	}
+}
+
+/**
   * @brief Funcion Principal
   */
 int main(int argc, char *argv[]){;
@@ -261,10 +289,10 @@ int main(int argc, char *argv[]){;
 		tFin = high_resolution_clock::now();
 		tTotalAS += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	tablaS = construye_prop_a(tama, posicion);
+	tablaS = construye_prop_a(tama);
 	for(int i = 0; i < mediciones; i++){		
 		tIni = high_resolution_clock::now();
-		genera_demanda_BS(tablaS, posicion, tama);
+		genera_demanda_BS(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalAO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
@@ -275,17 +303,17 @@ int main(int argc, char *argv[]){;
 		tFin = high_resolution_clock::now();
 		tTotalBS += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	tablaS = construye_prop_b(tama, posicion);
+	tablaS = construye_prop_b(tama);
 	for(int i = 0; i < mediciones; i++){
 		tIni = high_resolution_clock::now();
-		genera_demanda_BS(tablaS, posicion, tama);
+		genera_demanda_BS(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalBO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	tablaS = construye_prop_c_orden(tama);
+	tablaS = construye_prop_c_orden(tama, posicion);
 	for(int i = 0; i < mediciones; i++){
 		tIni = high_resolution_clock::now();
-		genera_demanda(tablaS, tama);
+		genera_demanda_orden(tablaS, posicion, tama);
 		tFin = high_resolution_clock::now();
 		tTotalCS += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}

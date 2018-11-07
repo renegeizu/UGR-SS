@@ -11,7 +11,6 @@ using namespace std::chrono;
 
 double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
 float* tablaS;
-int* posicion;
 long mediciones = 1000000, tama = 100;
 
 /**
@@ -151,10 +150,6 @@ int main(int argc, char *argv[]){;
 		printf("\nFormato de 2 Argumento: <Numero Mediciones> <Tamaño>\n");
 		exit(1);
 	}
-	if((posicion = (int*) malloc(tama*sizeof(int))) == NULL){
-		fputs("Error reservando memoria para vector\n",stderr);
-		exit(1);
-	}
 	srand(time(NULL));
 	high_resolution_clock::time_point tIni, tFin;
 	tablaS = construye_prop_a(tama);
@@ -164,10 +159,10 @@ int main(int argc, char *argv[]){;
 		tFin = high_resolution_clock::now();
 		tTotalAS += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	tablaS = construye_prop_a(tama, posicion);
+	tablaS = construye_prop_a(tama);
 	for(int i = 0; i < mediciones; i++){		
 		tIni = high_resolution_clock::now();
-		genera_demanda(tablaS, posicion, tama);
+		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalAO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
