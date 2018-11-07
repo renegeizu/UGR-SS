@@ -11,8 +11,8 @@ using namespace std;
 using namespace std::chrono;
 
 float* tablaS;
-double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
-long mediciones = 100, tama = 100000;
+double tTotalCS = 0.0, tTotalCO = 0.0;
+long mediciones = 1000000, tama = 100;
 multimap<float,int,greater<float>> tablaO;
 
 /**
@@ -40,28 +40,6 @@ float *construye_prop_a(int n){
 }
 
 /**
-  * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado a)
-  */
-multimap<float,int,greater<float>> construye_prop_a_orden(int n){
-	int i;
-	multimap<float,int,greater<float>> temp, aux;
-	for(i = 0; i < n; i++){
-		temp.insert(pair<float,int>((float)1.0/n,i));
-	}
-	pair<float,int> par;
-	for (multimap<float,int>::iterator it = temp.begin(); it != temp.end(); ++it){
-		if(it != temp.begin()){
-			par = make_pair(par.first+it->first,it->second);
-			aux.insert(par);
-		}else{
-			par = make_pair(it->first,it->second);
-			aux.insert(par);
-		}
-	}
-	return aux;
-}
-
-/**
   * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado b)
   */
 float* construye_prop_b(int n){
@@ -77,30 +55,6 @@ float* construye_prop_b(int n){
 		temp[i] = temp[i-1]+(float)(n-i)/max;
 	}
 	return temp;
-}
-
-/**
-  * @brief Construye la tabla de busqueda de tamaño n para la distribucion de la demanda (Apartado b)
-  */
-multimap<float,int,greater<float>> construye_prop_b_orden(int n){
-	int i, max;
-	multimap<float,int,greater<float>> temp, aux;
-	max = (n/2)*(n+1);
-	temp.insert(pair<float,int>(n*1.0/max,0));
-	for(i = 1; i < n; i++){
-		temp.insert(pair<float,int>((float)(n-i)/max,i));
-	}
-	pair<float,int> par;
-	for (multimap<float,int>::iterator it = temp.begin(); it != temp.end(); ++it){
-		if(it != temp.begin()){
-			par = make_pair(par.first+it->first,it->second);
-			aux.insert(par);
-		}else{
-			par = make_pair(it->first,it->second);
-			aux.insert(par);
-		}
-	}
-	return aux;
 }
 
 /**
@@ -187,8 +141,8 @@ int genera_demanda_orden(multimap<float,int,greater<float>> tabla, int tama){
   */
 int main(int argc, char *argv[]){;
 	if(argc == 1){
-		mediciones = 100;
-		tama = 100000;
+		mediciones = 1000000;
+		tama = 100;
 	}else if(argc == 2){
 		sscanf(argv[1], "%ld", &mediciones);
 	}else if(argc == 3){
@@ -201,43 +155,21 @@ int main(int argc, char *argv[]){;
 	}
 	srand(time(NULL));
 	high_resolution_clock::time_point tIni, tFin;
+	tablaS = construye_prop_c(tama);
 	for(int i = 0; i < mediciones; i++){
-		tablaS = construye_prop_a(tama);
-		tIni = high_resolution_clock::now();
-		genera_demanda(tablaS, tama);
-		tFin = high_resolution_clock::now();
-		tTotalAS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaO = construye_prop_a_orden(tama);
-		tIni = high_resolution_clock::now();
-		genera_demanda_orden(tablaO, tama);
-		tFin = high_resolution_clock::now();
-		tTotalAO += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaS = construye_prop_b(tama);
-		tIni = high_resolution_clock::now();
-		genera_demanda(tablaS, tama);
-		tFin = high_resolution_clock::now();
-		tTotalBS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaO = construye_prop_b_orden(tama);
-		tIni = high_resolution_clock::now();
-		genera_demanda_orden(tablaO, tama);
-		tFin = high_resolution_clock::now();
-		tTotalBO += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaS = construye_prop_c(tama);
 		tIni = high_resolution_clock::now();
 		genera_demanda(tablaS, tama);
 		tFin = high_resolution_clock::now();
 		tTotalCS += (duration_cast<duration<double>>(tFin-tIni)).count();
-		tablaO = construye_prop_c_orden(tama);
+	}
+	tablaO = construye_prop_c_orden(tama);
+	for(int i = 0; i < mediciones; i++){
 		tIni = high_resolution_clock::now();
 		genera_demanda_orden(tablaO, tama);
 		tFin = high_resolution_clock::now();
 		tTotalCO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	cout << "Tabla Busqueda A - Sin Ordenar: " << (double)tTotalAS/mediciones << endl;
-	cout << "Tabla Busqueda A - Ordenada   : " << (double)tTotalAO/mediciones << endl;
-	cout << "Tabla Busqueda B - Sin Ordenar: " << (double)tTotalBS/mediciones << endl;
-	cout << "Tabla Busqueda B - Ordenada   : " << (double)tTotalBO/mediciones << endl;
-	cout << "Tabla Busqueda C - Sin Ordenar: " << (double)tTotalCS/mediciones << endl;
-	cout << "Tabla Busqueda C - Ordenada   : " << (double)tTotalCO/mediciones << endl;
+	cout << "Tabla Busqueda C - Sin Ordenar\t" << (double)tTotalCS/mediciones << endl;
+	cout << "Tabla Busqueda C - Ordenada\t" << (double)tTotalCO/mediciones << endl;
 	return 0;
 }
