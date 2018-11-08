@@ -166,7 +166,7 @@ int main(int argc, char *argv[]){;
 		tFin = high_resolution_clock::now();
 		tTotalAO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	cout << "A_BS\t" << (double)tTotalAS/mediciones << endl;
-	cout << "A_Mejor\t" << (double)tTotalAO/mediciones << endl;
+	cout << "A-BS\t" << (double)tTotalAS/mediciones << endl;
+	cout << "A-Mejor\t" << (double)tTotalAO/mediciones << endl;
 	return 0;
 }

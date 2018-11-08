@@ -320,11 +320,11 @@ int main(int argc, char *argv[]){;
 		tFin = high_resolution_clock::now();
 		tTotalCO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	cout << "A_Norm\t" << (double)tTotalAS/mediciones << endl;
-	cout << "A_BS\t" << (double)tTotalAO/mediciones << endl;
-	cout << "B_Norm\t" << (double)tTotalBS/mediciones << endl;
-	cout << "B_BS\t" << (double)tTotalBO/mediciones << endl;
-	cout << "C_NormOrden\t" << (double)tTotalCS/mediciones << endl;
-	cout << "C_BS\t" << (double)tTotalCO/mediciones << endl;
+	cout << "A-Normal\t" << (double)tTotalAS/mediciones << endl;
+	cout << "A-BS\t" << (double)tTotalAO/mediciones << endl;
+	cout << "B-Normal\t" << (double)tTotalBS/mediciones << endl;
+	cout << "B-BS\t" << (double)tTotalBO/mediciones << endl;
+	cout << "C-Orden\t" << (double)tTotalCS/mediciones << endl;
+	cout << "C-BS\t" << (double)tTotalCO/mediciones << endl;
 	return 0;
 }

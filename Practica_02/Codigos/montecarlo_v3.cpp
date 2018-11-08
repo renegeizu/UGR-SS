@@ -169,7 +169,7 @@ int main(int argc, char *argv[]){;
 		tFin = high_resolution_clock::now();
 		tTotalCO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
-	cout << "C_SinOrden\t" << (double)tTotalCS/mediciones << endl;
-	cout << "C_Orden\t" << (double)tTotalCO/mediciones << endl;
+	cout << "C-NoOrden\t" << (double)tTotalCS/mediciones << endl;
+	cout << "C-Orden\t" << (double)tTotalCO/mediciones << endl;
 	return 0;
 }
