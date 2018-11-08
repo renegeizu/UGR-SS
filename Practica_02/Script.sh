@@ -152,10 +152,10 @@ else
 		done
 	done
 
-	gnuplot -e "set boxwidth 0.3; set style fill solid; plot '$datos/V3/ComparacionTiempos_V3.dat' using 2:xtic(1) title 'ComparacionTiempos_V3' with boxes; set terminal png; set output '$graficas/V3/ComparacionTiempos_V3.png'; replot"
-	gnuplot -e "set boxwidth 0.3; set style fill solid; plot '$datos/V3/ComparacionTiempos_V3_1.dat' using 2:xtic(1) title 'ComparacionTiempos_V3_1' with boxes; set terminal png; set output '$graficas/V3/ComparacionTiempos_V3_1.png'; replot"
-	gnuplot -e "set boxwidth 0.3; set style fill solid; plot '$datos/V4/ComparacionTiempos_V4.dat' using 2:xtic(1) title 'ComparacionTiempos_V4' with boxes; set terminal png; set output '$graficas/V4/ComparacionTiempos_V4.png'; replot"
-	gnuplot -e "set boxwidth 0.3; set style fill solid; plot '$datos/V5/ComparacionTiempos_V5.dat' using 2:xtic(1) title 'ComparacionTiempos_V5' with boxes; set terminal png; set output '$graficas/V5/ComparacionTiempos_V5.png'; replot"
+	gnuplot -e "set boxwidth 0.3; set style fill solid; plot '$datos/V3/ComparacionTiempos_V3.dat' using 2:xtic(1) title 'ComparacionTiemposV3' with boxes; set terminal png; set output '$graficas/V3/ComparacionTiempos_V3.png'; replot"
+	gnuplot -e "set boxwidth 0.3; set style fill solid; plot '$datos/V3/ComparacionTiempos_V3_1.dat' using 2:xtic(1) title 'ComparacionTiemposV3-1' with boxes; set terminal png; set output '$graficas/V3/ComparacionTiempos_V3_1.png'; replot"
+	gnuplot -e "set boxwidth 0.3; set style fill solid; plot '$datos/V4/ComparacionTiempos_V4.dat' using 2:xtic(1) title 'ComparacionTiemposV4' with boxes; set terminal png; set output '$graficas/V4/ComparacionTiempos_V4.png'; replot"
+	gnuplot -e "set boxwidth 0.3; set style fill solid; plot '$datos/V5/ComparacionTiempos_V5.dat' using 2:xtic(1) title 'ComparacionTiemposV5' with boxes; set terminal png; set output '$graficas/V5/ComparacionTiempos_V5.png'; replot"
 
 	echo -e "${gray}Finalizado${nocolor}"
 fi

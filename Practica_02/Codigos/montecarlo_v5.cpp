@@ -9,7 +9,7 @@
 using namespace std;
 using namespace std::chrono;
 
-double tTotalAS = 0.0, tTotalAO = 0.0, tTotalBS = 0.0, tTotalBO = 0.0, tTotalCS = 0.0, tTotalCO = 0.0;
+double tTotalAS = 0.0, tTotalAO = 0.0, tTotalA = 0.0;
 float* tablaS;
 long mediciones = 1000000, tama = 100;
 
@@ -102,7 +102,27 @@ float* construye_prop_a(int n){
   *		 para obtener la posicion
   */
 int genera_demanda(float *tabla, int tama){
-	return ceil((double)uniforme()*tama);
+	double u = uniforme();
+	int aux = ceil((double)u*tama);
+	if(u >= tabla[aux-1]){
+		return (aux-1);
+	}else{
+		return aux;
+	}
+}
+
+/**
+  * @brief Genera un valor de la distribucion de la demanda codificada en tabla, por el metodo de
+  *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
+  */
+int genera_demanda_normal(float *tabla, int tama){
+	int i;
+	double u = uniforme();
+	i = 0;
+	while((i>=tama) && (u>=tabla[i])){
+		i++;
+	}
+	return i;
 }
 
 /**
@@ -166,6 +186,14 @@ int main(int argc, char *argv[]){;
 		tFin = high_resolution_clock::now();
 		tTotalAO += (duration_cast<duration<double>>(tFin-tIni)).count();
 	}
+	tablaS = construye_prop_a(tama);
+	for(int i = 0; i < mediciones; i++){		
+		tIni = high_resolution_clock::now();
+		genera_demanda_normal(tablaS, tama);
+		tFin = high_resolution_clock::now();
+		tTotalA += (duration_cast<duration<double>>(tFin-tIni)).count();
+	}
+	cout << "A-Normal\t" << (double)tTotalA/mediciones << endl;
 	cout << "A-BS\t" << (double)tTotalAS/mediciones << endl;
 	cout << "A-Mejor\t" << (double)tTotalAO/mediciones << endl;
 	return 0;
