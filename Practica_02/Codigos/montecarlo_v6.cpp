@@ -91,7 +91,18 @@ int gen_cong_lin_real_art_fmod(int a, int b, int m){
 /**
   * @brief Funcion Principal
   */
-int main(int argc, char *argv[]){;
-		
+int main(int argc, char *argv[]){
+	int a1 = 2016, a2 = 2060, b12 = 4321, m12 = 10000;
+	cout << "x(n+1) = (2061x(n)+4321) mod m  ->  Gen. Cong. Lin. Entera:           " << gen_cong_lin_entera(a1, b12, m12) << endl;
+	cout << "x(n+1) = (2061x(n)+4321) mod m  ->  Gen. Cong. Lin. Real Art. Float:  " << gen_cong_lin_real_art_float(a1, b12, m12) << endl;
+	cout << "x(n+1) = (2061x(n)+4321) mod m  ->  Gen. Cong. Lin. Real Art. Double: " << gen_cong_lin_real_art_double(a1, b12, m12) << endl;
+	cout << "x(n+1) = (2061x(n)+4321) mod m  ->  Gen. Cong. Lin. Real Art. Int:    " << gen_cong_lin_real_art_int(a1, b12, m12) << endl;
+	cout << "x(n+1) = (2061x(n)+4321) mod m  ->  Gen. Cong. Lin. Real Art. Fmod:   " << gen_cong_lin_real_art_fmod(a1, b12, m12) << endl;
+	cout << endl;
+	cout << "x(n+1) = (2060x(n)+4321) mod m  ->  Gen. Cong. Lin. Entera:           " << gen_cong_lin_entera(a2, b12, m12) << endl;
+	cout << "x(n+1) = (2060x(n)+4321) mod m  ->  Gen. Cong. Lin. Real Art. Float:  " << gen_cong_lin_real_art_float(a2, b12, m12) << endl;
+	cout << "x(n+1) = (2060x(n)+4321) mod m  ->  Gen. Cong. Lin. Real Art. Double: " << gen_cong_lin_real_art_double(a2, b12, m12) << endl;
+	cout << "x(n+1) = (2060x(n)+4321) mod m  ->  Gen. Cong. Lin. Real Art. Int:    " << gen_cong_lin_real_art_int(a2, b12, m12) << endl;
+	cout << "x(n+1) = (2060x(n)+4321) mod m  ->  Gen. Cong. Lin. Real Art. Fmod:   " << gen_cong_lin_real_art_fmod(a2, b12, m12) << endl;
 	return 0;
 }

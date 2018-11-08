@@ -97,23 +97,26 @@ int genera_demanda(float *tabla, int tama){
 int main(int argc, char *argv[]){
 	if(argc == 1){
 		valor_x = 10;
+		valor_y = 0;
 		valor_z = 0;
 		num_veces = 100;
 		num_apartado = 1;
-	}else if(argc == 5){
-		sscanf(argv[1], "%ld", &valor_x);
-		sscanf(argv[2], "%ld", &valor_z);
-		sscanf(argv[3], "%ld", &num_veces);
-		sscanf(argv[4], "%ld", &num_apartado);
 	}else if(argc == 6){
 		sscanf(argv[1], "%ld", &valor_x);
-		sscanf(argv[2], "%ld", &valor_z);
-		sscanf(argv[3], "%ld", &num_veces);
-		sscanf(argv[4], "%ld", &num_apartado);
-		sscanf(argv[5], "%ld", &tama);
+		sscanf(argv[2], "%ld", &valor_y);
+		sscanf(argv[3], "%ld", &valor_z);
+		sscanf(argv[4], "%ld", &num_veces);
+		sscanf(argv[5], "%ld", &num_apartado);
+	}else if(argc == 7){
+		sscanf(argv[1], "%ld", &valor_x);
+		sscanf(argv[2], "%ld", &valor_y);
+		sscanf(argv[3], "%ld", &valor_z);
+		sscanf(argv[4], "%ld", &num_veces);
+		sscanf(argv[5], "%ld", &num_apartado);
+		sscanf(argv[6], "%ld", &tama);
 	}else{
-		printf("\nFormato de 5 Argumentos: <Valor de X> <Valor de Z> <Numero de Veces> <Numero de Apartado>\n");
-		printf("\nFormato de 6 Argumentos: <Valor de X> <Valor de Z> <Numero de Veces> <Numero de Apartado> <Tamaño>\n");
+		printf("\nFormato de 5 Argumentos: <Valor de X> <Valor de Y> <Valor de Z> <Numero de Veces> <Numero de Apartado>\n");
+		printf("\nFormato de 6 Argumentos: <Valor de X> <Valor de Y> <Valor de Z> <Numero de Veces> <Numero de Apartado> <Tamaño>\n");
 		exit(1);
 	}
 	srand(time(NULL));
@@ -142,7 +145,7 @@ int main(int argc, char *argv[]){
 		for(i = 0; i < num_veces; i++){
 			demanda = genera_demanda(tabla_demanda, tama);
 			if(s > demanda){
-				ganancia = demanda*valor_x-valor_z; //Funcion Min
+				ganancia = demanda*valor_x-min(valor_z, (s-demanda)*valor_y);
 			}else{
 				ganancia = s*valor_x;
 			}
