@@ -119,7 +119,7 @@ int genera_demanda_normal(float *tabla, int tama){
 	int i;
 	double u = uniforme();
 	i = 0;
-	while((i>=tama) && (u>=tabla[i])){
+	while((i<tama) && (u>=tabla[i])){
 		i++;
 	}
 	return i;
@@ -130,27 +130,37 @@ int genera_demanda_normal(float *tabla, int tama){
   *		 tablas de busqueda. Tama es el tamaño de la tabla, 100 en nuestro caso particular
   */
 int genera_demanda_BS(float* tabla, int tama){
-	double u = uniforme(), comparador = 1.0/tama, valor;
+	bool flag = true;
+	double u = uniforme();
 	int derecha = tama-1, izquierda = 0, centro;
 	if(tama == 1){
-		if(abs(tabla[0]-u) <  comparador){
+		if(u >= tabla[0]){
 			return 0;
 		}else{
 			return -1;
 		}
 	}else{
-		while(izquierda <= derecha){
-			centro = (derecha+izquierda)/2;
-			valor = abs(tabla[centro]-u);
-			if(valor <  comparador){
-				return centro;			
-			}else if(u >= tabla[centro]){
-				izquierda = centro+1;
+		centro = (derecha-izquierda)/2;
+		while(flag){
+			if(u > tabla[centro]){
+				izquierda = centro;
+			}else if(u < tabla[centro]){
+				derecha = centro;
 			}else{
-				derecha = centro-1;
+				flag = false;
+			}
+			centro = (derecha-izquierda)/2;
+			if(centro == izquierda || centro == derecha){
+				if(u >= tabla[izquierda]){
+					centro = izquierda;
+				}else{
+					centro = derecha;
+				}
+				flag = false;
 			}
 		}
 	}
+	return centro;
 }
 
 /**

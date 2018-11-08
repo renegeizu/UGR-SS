@@ -113,7 +113,7 @@ int genera_demanda(float *tabla, int tama){
 	int i;
 	double u = uniforme();
 	i = 0;
-	while((i>=tama) && (u>=tabla[i])){
+	while((i<tama) && (u>=tabla[i])){
 		i++;
 	}
 	return i;

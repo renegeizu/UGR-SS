@@ -1,10 +1,12 @@
 //Ejercicio 2.2 - Generadores Congruenciales
 
+#include <algorithm>
 #include <cmath>
 #include <chrono>
 #include <ctime>
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 using namespace std::chrono;
@@ -19,97 +21,77 @@ double uniforme(){
 /**
   * @brief Generador Congruencial Lineal - Aritmetica Entera - Long
   */
-long* gen_cong_lin_entera(int a, int b, int m, int n){
-	int i;
-	long *temp;
-	if((temp = (long*) malloc(n*sizeof(long))) == NULL){
-		fputs("Error reservando memoria para generador uniforme\n", stderr);
-		exit(1);
-	}
-	temp[0] = (long)0;
-	for(i = 1; i < n; i++){
-		temp[i] = (a*temp[i-1]+4321)%m;
-	}
-	return temp;
+int gen_cong_lin_entera(int a, int b, int m){
+	vector<long> temp;
+	long aux = 0;
+	do{
+		temp.push_back(aux);
+		aux = (a*temp[temp.size()-1]+4321)%m;
+	}while(find(temp.begin(), temp.end(), aux) == temp.end());
+	return temp.size();
 }
 
 /**
   * @brief Generador Congruencial Lineal - Aritmetica Real Artesanal - Float
   */
-float* gen_cong_lin_real_art_float(int a, int b, int m, int n){
-	int i;
-	float *temp;
-	if((temp = (float*) malloc(n*sizeof(float))) == NULL){
-		fputs("Error reservando memoria para generador uniforme\n", stderr);
-		exit(1);
-	}
-	temp[0] = (float)0;
-	for(i = 1; i < n; i++){
-		temp[i] = (float)(a*temp[i-1]+b)/m;
-		temp[i] = (float)(temp[i]-(int)temp[i])*m;
-	}
-	return temp;
+int gen_cong_lin_real_art_float(int a, int b, int m){
+	vector<float> temp;
+	float aux = 0;
+	do{
+		temp.push_back(aux);
+		aux = (float)(a*temp[temp.size()-1]+b)/m;
+		aux = (float)(aux-(int)aux)*m;
+	}while(find(temp.begin(), temp.end(), aux) == temp.end());
+	return temp.size();
 }
 
 /**
   * @brief Generador Congruencial Lineal - Aritmetica Real Artesanal - Double
   */
-double* gen_cong_lin_real_art_double(int a, int b, int m, int n){
-	int i;
-	double *temp;
-	if((temp = (double*) malloc(n*sizeof(double))) == NULL){
-		fputs("Error reservando memoria para generador uniforme\n", stderr);
-		exit(1);
-	}
-	temp[0] = (double)0;
-	for(i = 1; i < n; i++){
-		temp[i] = (double)(a*temp[i-1]+b)/m;
-		temp[i] = (double)(temp[i]-(int)temp[i])*m;
-	}
-	return temp;
+int gen_cong_lin_real_art_double(int a, int b, int m){
+	vector<double> temp;
+	double aux = 0;
+	do{
+		temp.push_back(aux);
+		aux = (double)(a*temp[temp.size()-1]+b)/m;
+		aux = (double)(aux-(int)aux)*m;
+	}while(find(temp.begin(), temp.end(), aux) == temp.end());
+	return temp.size();
 }
 
 /**
   * @brief Generador Congruencial Lineal - Aritmetica Real Artesanal Corregido - Int
   */
-float* gen_cong_lin_real_art_int(int a, int b, int m, int n){
-	int i;
-	float *temp;
-	float aux;
-	if((temp = (int*) malloc(n*sizeof(int))) == NULL){
-		fputs("Error reservando memoria para generador uniforme\n", stderr);
-		exit(1);
-	}
-	temp[0] = (int)0;
-	for(i = 1; i < n; i++){
-		aux = (float)(a*temp[i-1]+b)/m;
-		aux = (float)(aux-(int)aux)*m;
-		temp[0] = (int)(aux+0.5);
-	}
-	return temp;
+int gen_cong_lin_real_art_int(int a, int b, int m){
+	vector<int> temp;
+	float aux2 = 0;
+	int aux = 0;
+	do{
+		temp.push_back(aux);
+		aux2 = (float)(a*temp[temp.size()-1]+b)/m;
+		aux2 = (float)(aux2-(int)aux2)*m;
+		aux = (int)(aux2+0.5);
+	}while(find(temp.begin(), temp.end(), aux) == temp.end());
+	return temp.size();
 }
 
 /**
   * @brief Generador Congruencial Lineal - Aritmetica Real fmod - Double
   */
-double* gen_cong_lin_real_art_double(int a, int b, int m, int n){
-	int i;
-	double *temp;
-	if((temp = (double*) malloc(n*sizeof(double))) == NULL){
-		fputs("Error reservando memoria para generador uniforme\n", stderr);
-		exit(1);
-	}
-	temp[0] = (double)0;
-	for(i = 1; i < n; i++){
-		temp[i] = (double)fmod((a*temp[i-1]+b),m);
-	}
-	return temp;
+int gen_cong_lin_real_art_fmod(int a, int b, int m){
+	vector<double> temp;
+	double aux = 0;
+	do{
+		temp.push_back(aux);
+		aux = (double)fmod((a*temp[temp.size()-1]+b),m);
+	}while(find(temp.begin(), temp.end(), aux) == temp.end());
+	return temp.size();
 }
 
 /**
   * @brief Funcion Principal
   */
 int main(int argc, char *argv[]){;
-	
+		
 	return 0;
 }
