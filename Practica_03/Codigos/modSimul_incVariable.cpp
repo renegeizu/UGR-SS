@@ -1,8 +1,10 @@
 // Modelo de Simulacion - Metodo de Incremento Variable de Tiempo
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstdlib>
+#include <ctime>
 #include <iostream>
 
 using namespace std;
@@ -47,10 +49,12 @@ int main(int argc, char *argv[]){
 		sscanf(argv[2], "%lf", &tServicio);
 		sscanf(argv[3], "%ld", &total_a_atender);
 	}else{
-		printf("\nFormato: <Tiempo Llegada (Minutos)> <Tiempo Servicio (Minutos)> <Numero Clientes>\n");
+		printf("\nFormato: <Tiempo Llegada> <Tiempo Servicio> <Numero Clientes>\n");
 		exit(1);
 	}
 	iniciarValores();
+	high_resolution_clock::time_point tIni, tFin;
+	tIni = high_resolution_clock::now();
 	while(atendidos < total_a_atender){
 		reloj = min(tiempo_llegada, tiempo_salida);
 		if(reloj == tiempo_llegada){
@@ -80,12 +84,15 @@ int main(int argc, char *argv[]){
 		}
 		reloj++;
 	}
+	tFin = high_resolution_clock::now();
 	if(graficar){
-			printf("%lf\t%lf\t%ld\n", (double) (ocio*100/reloj), (double) (acum_cola/reloj), total_a_atender);
+			printf("%lf\t%lf\t%f\t%ld\n", (double) (ocio*100/reloj), (double) (acum_cola/reloj), 
+				(duration_cast<duration<double>>(tFin-tIni)).count(), total_a_atender);
 	}else{
 			printf("Tiempo de Ocio del Servidor: %lf por Ciento", (double) (ocio*100/reloj));
 			printf("Numero Medio de Clientes en Cola: %lf por Ciento", (double) (acum_cola/reloj));
 			printf("Numero Total de Clientes: %ld", total_a_atender);
+			printf("Tiempo Total de Ejecucion: %f", (duration_cast<duration<double>>(tFin-tIni)).count());
 	}
 	return 0;
 }
