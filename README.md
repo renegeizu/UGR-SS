@@ -13,3 +13,8 @@ Practica 02
 --------------------
 + Modelo de MonteCarlo
 + Generadores de Datos
+
+Practica 03
+--------------------
++ Modelo de Simulacion Discreto
++ Analisis de Salidas y Experimentacion
