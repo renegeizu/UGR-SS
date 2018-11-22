@@ -48,6 +48,7 @@ else
 	# Compilamos todos los .cpp y .C
 	g++ -std=c++11 $1 $codigos/modSimul_incFijo.cpp -o $ejecutables/modSimul_incFijo
 	g++ -std=c++11 $1 $codigos/modSimul_incVariable.cpp -o $ejecutables/modSimul_incVariable
+	g++ -std=c++11 $1 $codigos/puerto.cpp -o $ejecutables/puerto
 
 	echo -e "${orange}Fin de la compilacion${nocolor}"
 
