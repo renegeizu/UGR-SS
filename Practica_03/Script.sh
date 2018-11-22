@@ -51,10 +51,16 @@ else
 
 	echo -e "${orange}Fin de la compilacion${nocolor}"
 
-	# Le pasamos valores al modelo de MonteCarlo y recogemos la informacion en .dat
-	echo -e "${purple}Obteniendo datos del modelo...${nocolor}"
+	# Le pasamos valores al modelo y recogemos la informacion en .dat
+	echo -e "${purple}Obteniendo datos de los modelos fijo y variable...${nocolor}"
 
-	#Obtencion de Datos
+	tlleg=(0.15 9 540)
+	tserv=(0.1 6 360)
+	for ((A=0;A<3;A=A+1))
+	do
+		$ejecutables/modSimul_incFijo ${tlleg[$A]} ${tserv[$A]} 10000 10000 >> $datos/modSimul_incFijo_${tlleg[$A]}-${tserv[$A]}.dat
+		$ejecutables/modSimul_incVariable ${tlleg[$A]} ${tserv[$A]} 10000 10000 >> $datos/modSimul_incVariable_${tlleg[$A]}-${tserv[$A]}.dat
+	done
 
 	echo -e "${purple}Finalizado${nocolor}"
 
