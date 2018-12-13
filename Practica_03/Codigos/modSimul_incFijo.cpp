@@ -36,7 +36,6 @@ float generaServicio(float tServicio){
 }
 
 void iniciarValores(){
-	srand(time(NULL));
 	infinito = 10e17;
 	atendidos = 0;
 	inicio_ocio = 0.0;
@@ -71,6 +70,7 @@ int main(int argc, char *argv[]){
 		printf("\nFormato 4 Parametros: <Tiempo Llegada> <Tiempo Servicio> <Numero Clientes> <Numero Simulaciones>\n");
 		exit(1);
 	}
+	srand(time(NULL));
 	for(int i = 0; i < numSimul; i++){
 		iniciarValores();
 		high_resolution_clock::time_point tIni, tFin;
