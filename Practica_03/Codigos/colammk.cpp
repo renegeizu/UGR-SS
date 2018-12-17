@@ -145,7 +145,7 @@ void salida(){
      }
 }
 
-void fin(){
+void fin(int ciclo){
 	parar = true;
 	float retrasomedio = acum_retraso/atendidos;
 	float estanciamedia = retrasomedio + tserv;
@@ -168,11 +168,6 @@ void fin(){
 		printf("\nLongitud Maxima de la Cola = %d", maximacola);
 		printf("\n");
 	}else{
-		float totalMedidasMed[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-		int totalMaxColaMed = 0;
-		vector<vector<float>> totalMedidasDesv;
-		vector<vector<int>> totalMaxColaDesv;
-		//Media
 		totalMedidasMed[0] += retrasomedio;
 		totalMedidasMed[1] += estanciamedia;
 		totalMedidasMed[2] += encolamedio;
@@ -180,8 +175,13 @@ void fin(){
 		totalMedidasMed[4] += colasnovaciasmedio;
 		totalMedidasMed[5] += porcentajemedioocio;
 		totalMaxColaMed += maximacola;
-		//Desviacion
-		//Inicializar Vector de Vectores y agregar
+		totalMedidasDesv[0][ciclo] = retrasomedio;
+		totalMedidasDesv[1][ciclo] = estanciamedia;
+		totalMedidasDesv[2][ciclo] = encolamedio;
+		totalMedidasDesv[3][ciclo] = ensistemamedio;
+		totalMedidasDesv[4][ciclo] = colasnovaciasmedio;
+		totalMedidasDesv[5][ciclo] = porcentajemedioocio;
+		totalMaxColaDesv[ciclo] = maximacola;
 	}
 }
 
@@ -195,7 +195,7 @@ void monitor(){
 	}
 }
 
-void suceso(){
+void suceso(int ciclo){
 	switch(nodo.suceso){
 		case suceso_llegada:
 			llegada();
@@ -204,7 +204,7 @@ void suceso(){
 			salida();
 			break;
 		case suceso_finsimulacion:
-			fin();
+			fin(ciclo);
 			break;
 		case suceso_monitor:
 			monitor();
@@ -231,7 +231,11 @@ int main(int argc, char *argv[]){
 		printf("\nFormato 5 Parametros: <Numero Servidores> <Tiempo Parada> <tlleg> <tserv> <Numero Simulaciones>\n");
 		exit(1);
 	}
-	srandom(time(NULL));	
+	srandom(time(NULL));
+	for(int j = 0; j < numSimul; j++){
+		totalMedidasDesv.push_back(vector<float>(numSimul));
+	}
+	totalMaxColaDesv.push_back(vector<int>(numSimul))
 	for(int i = 0; i < numSimul; i++){
 		if(!graficar){
 			printf("\nResultados Interacion %d:\n", i);
@@ -239,12 +243,58 @@ int main(int argc, char *argv[]){
 		inicializacion();
 		while(!parar){
 			temporizacion();
-			suceso();
+			suceso(i);
 		}
 	}
 	if(graficar){
-		//Media
-
-		//Desviacion
+		totalMedidasMed[0] /= numSimul;
+		totalMedidasMed[1] /= numSimul;
+		totalMedidasMed[2] /= numSimul;
+		totalMedidasMed[3] /= numSimul;
+		totalMedidasMed[4] /= numSimul;
+		totalMedidasMed[5] /= numSimul;
+		totalMaxColaMed /= numSimul;
+		float CalculoInic = (float) 1/(n-1);
+		for(int j = 0; j < numSimul; j++){
+			totalMedidasDesv[0][j] = totalMedidasDesv[0][j]*totalMedidasDesv[0][j]-numSimul*(totalMedidasMed[0]*totalMedidasMed[0]);
+			totalMedidasDesv[1][j] = totalMedidasDesv[1][j]*totalMedidasDesv[1][j]-numSimul*(totalMedidasMed[1]*totalMedidasMed[1]);
+			totalMedidasDesv[2][j] = totalMedidasDesv[2][j]*totalMedidasDesv[2][j]-numSimul*(totalMedidasMed[2]*totalMedidasMed[2]);
+			totalMedidasDesv[3][j] = totalMedidasDesv[3][j]*totalMedidasDesv[3][j]-numSimul*(totalMedidasMed[3]*totalMedidasMed[3]);
+			totalMedidasDesv[4][j] = totalMedidasDesv[4][j]*totalMedidasDesv[4][j]-numSimul*(totalMedidasMed[4]*totalMedidasMed[4]);
+			totalMedidasDesv[5][j] = totalMedidasDesv[5][j]*totalMedidasDesv[5][j]-numSimul*(totalMedidasMed[5]*totalMedidasMed[5]);
+			totalMaxColaDesv[j] = totalMaxColaDesv[j]*totalMaxColaDesv[j]-numSimul*(totalMaxColaMed*totalMaxColaMed);
+		}
+		for(int j = 1; j < numSimul; j++){
+			totalMedidasDesv[0][0] += totalMedidasDesv[0][j];
+			totalMedidasDesv[1][0] += totalMedidasDesv[1][j];
+			totalMedidasDesv[2][0] += totalMedidasDesv[2][j];
+			totalMedidasDesv[3][0] += totalMedidasDesv[3][j];
+			totalMedidasDesv[4][0] += totalMedidasDesv[4][j];
+			totalMedidasDesv[5][0] += totalMedidasDesv[5][j];
+			totalMaxColaDesv[0] += totalMaxColaDesv[j];
+		}
+		totalMedidasDesv[0][0] = sqrt(totalMedidasDesv[0][0]*CalculoInic);
+		totalMedidasDesv[1][0] = sqrt(totalMedidasDesv[1][0]*CalculoInic);
+		totalMedidasDesv[2][0] = sqrt(totalMedidasDesv[2][0]*CalculoInic);
+		totalMedidasDesv[3][0] = sqrt(totalMedidasDesv[3][0]*CalculoInic);
+		totalMedidasDesv[4][0] = sqrt(totalMedidasDesv[4][0]*CalculoInic);
+		totalMedidasDesv[5][0] = sqrt(totalMedidasDesv[5][0]*CalculoInic);
+		totalMaxColaDesv[0] = sqrt(totalMaxColaDesv[0]*CalculoInic);
+		printf("\nTiempo Medio de Espera en Cola = %.3f", totalMedidasMed[0][0]);
+		printf("\nTiempo Medio de Estancia en el Sistema = %.3f", totalMedidasMed[1][0]);	
+		printf("\nNumero Medio de Personas en Cola = %.3f", totalMedidasMed[2][0]);
+		printf("\nNumero Medio de Personas en el Sistema = %.3f", totalMedidasMed[3][0]);
+		printf("\nLongitud Media de Colas no Vacias = %.3f", totalMedidasMed[4][0]);
+		printf("\nPorcentaje Medio de Tiempo de Ocio por Servidor = %.3f", totalMedidasMed[5][0]);
+		printf("\nLongitud Media Maxima de la Cola = %d", totalMaxColaMed);
+		printf("\n");
+		printf("\nDesviacion Tipica del Tiempo de Espera en Cola = %.3f", totalMedidasDesv[0][0]);
+		printf("\nDesviacion Tipica del Tiempo de Estancia en el Sistema = %.3f", totalMedidasDesv[1][0]);	
+		printf("\nDesviacion Tipica del Numero de Personas en Cola = %.3f", totalMedidasDesv[2][0]);
+		printf("\nDesviacion Tipica del Numero de Personas en el Sistema = %.3f", totalMedidasDesv[3][0]);
+		printf("\nDesviacion Tipica de la Longitud de Colas no Vacias = %.3f", totalMedidasDesv[4][0]);
+		printf("\nDesviacion Tipica del Porcentaje de Tiempo de Ocio por Servidor = %.3f", totalMedidasDesv[5][0]);
+		printf("\nDesviacion Tipica de la Longitud Maxima de la Cola = %d", totalMaxColaDesv[0]);
+		printf("\n");
 	}
 }
