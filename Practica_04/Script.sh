@@ -48,22 +48,13 @@ else
 
 	# Compilamos todos los .cpp y .C
 	g++ -std=c++11 $1 $codigos/modSimul_incFijo.cpp -o $ejecutables/modSimul_incFijo
-	g++ -std=c++11 $1 $codigos/modSimul_incVariable.cpp -o $ejecutables/modSimul_incVariable
-	g++ -std=c++11 $1 $codigos/colammk.cpp -o $ejecutables/colammk
-	g++ -std=c++11 -I$includes $1 $codigos/puerto.cpp -o $ejecutables/puerto
 
 	echo -e "${orange}Fin de la compilacion${nocolor}"
 
 	# Le pasamos valores al modelo y recogemos la informacion en .dat
-	echo -e "${purple}Obteniendo datos de los modelos fijo y variable...${nocolor}"
+	echo -e "${purple}Obteniendo datos de los modelos...${nocolor}"
 
-	tlleg=(0.15 9 230 540)
-	tserv=(0.1 6  123 360)
-	for ((A=0;A<3;A=A+1))
-	do
-		$ejecutables/modSimul_incFijo ${tlleg[$A]} ${tserv[$A]} 10000 100 >> $datos/modSimul_incFijo_${tlleg[$A]}-${tserv[$A]}.dat
-		$ejecutables/modSimul_incVariable ${tlleg[$A]} ${tserv[$A]} 10000 100 >> $datos/modSimul_incVariable_${tlleg[$A]}-${tserv[$A]}.dat
-	done
+	# Codigo Aqui
 
 	echo -e "${purple}Finalizado${nocolor}"
 
