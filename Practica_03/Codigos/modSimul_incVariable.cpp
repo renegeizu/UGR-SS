@@ -106,5 +106,13 @@ int main(int argc, char *argv[]){
 				printf("Tiempo Total de Ejecucion: %f", (duration_cast<duration<double>>(tFin-tIni)).count());
 		}
 	}
+	if(tServicio < tLlegada){
+		float p = (float)(tServicio/tLlegada);
+		float q = (p*p)/(1-p);
+		float pto = 100*(1-p);
+		printf("\np = tServicio/tLlegada = %f", p);
+		printf("\nQ(n) = (p*p)/(1-p) = %f", q);
+		printf("\nPTO = 100*(1-p) = %f", pto);
+	}
 	return 0;
 }

@@ -33,7 +33,7 @@ suc nodo;
 float totalMedidasMed[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 int totalMaxColaMed = 0;
 vector<vector<float>> totalMedidasDesv;
-vector<vector<int>> totalMaxColaDesv;
+vector<int> totalMaxColaDesv;
 
 bool compare(const suc &s1, const suc &s2){
 	return s1.tiempo < s2.tiempo;
@@ -181,7 +181,7 @@ void fin(int ciclo){
 		totalMedidasDesv[3][ciclo] = ensistemamedio;
 		totalMedidasDesv[4][ciclo] = colasnovaciasmedio;
 		totalMedidasDesv[5][ciclo] = porcentajemedioocio;
-		totalMaxColaDesv[ciclo] = maximacola;
+		totalMaxColaDesv.push_back(maximacola);
 	}
 }
 
@@ -235,7 +235,6 @@ int main(int argc, char *argv[]){
 	for(int j = 0; j < numSimul; j++){
 		totalMedidasDesv.push_back(vector<float>(numSimul));
 	}
-	totalMaxColaDesv.push_back(vector<int>(numSimul))
 	for(int i = 0; i < numSimul; i++){
 		if(!graficar){
 			printf("\nResultados Interacion %d:\n", i);
@@ -254,7 +253,7 @@ int main(int argc, char *argv[]){
 		totalMedidasMed[4] /= numSimul;
 		totalMedidasMed[5] /= numSimul;
 		totalMaxColaMed /= numSimul;
-		float CalculoInic = (float) 1/(n-1);
+		float CalculoInic = (float) 1/(numSimul-1);
 		for(int j = 0; j < numSimul; j++){
 			totalMedidasDesv[0][j] = totalMedidasDesv[0][j]*totalMedidasDesv[0][j]-numSimul*(totalMedidasMed[0]*totalMedidasMed[0]);
 			totalMedidasDesv[1][j] = totalMedidasDesv[1][j]*totalMedidasDesv[1][j]-numSimul*(totalMedidasMed[1]*totalMedidasMed[1]);
@@ -280,12 +279,12 @@ int main(int argc, char *argv[]){
 		totalMedidasDesv[4][0] = sqrt(totalMedidasDesv[4][0]*CalculoInic);
 		totalMedidasDesv[5][0] = sqrt(totalMedidasDesv[5][0]*CalculoInic);
 		totalMaxColaDesv[0] = sqrt(totalMaxColaDesv[0]*CalculoInic);
-		printf("\nTiempo Medio de Espera en Cola = %.3f", totalMedidasMed[0][0]);
-		printf("\nTiempo Medio de Estancia en el Sistema = %.3f", totalMedidasMed[1][0]);	
-		printf("\nNumero Medio de Personas en Cola = %.3f", totalMedidasMed[2][0]);
-		printf("\nNumero Medio de Personas en el Sistema = %.3f", totalMedidasMed[3][0]);
-		printf("\nLongitud Media de Colas no Vacias = %.3f", totalMedidasMed[4][0]);
-		printf("\nPorcentaje Medio de Tiempo de Ocio por Servidor = %.3f", totalMedidasMed[5][0]);
+		printf("\nTiempo Medio de Espera en Cola = %.3f", totalMedidasMed[0]);
+		printf("\nTiempo Medio de Estancia en el Sistema = %.3f", totalMedidasMed[1]);	
+		printf("\nNumero Medio de Personas en Cola = %.3f", totalMedidasMed[2]);
+		printf("\nNumero Medio de Personas en el Sistema = %.3f", totalMedidasMed[3]);
+		printf("\nLongitud Media de Colas no Vacias = %.3f", totalMedidasMed[4]);
+		printf("\nPorcentaje Medio de Tiempo de Ocio por Servidor = %.3f", totalMedidasMed[5]);
 		printf("\nLongitud Media Maxima de la Cola = %d", totalMaxColaMed);
 		printf("\n");
 		printf("\nDesviacion Tipica del Tiempo de Espera en Cola = %.3f", totalMedidasDesv[0][0]);
