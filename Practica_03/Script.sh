@@ -50,7 +50,9 @@ else
 	g++ -std=c++11 $1 $codigos/modSimul_incFijo.cpp -o $ejecutables/modSimul_incFijo
 	g++ -std=c++11 $1 $codigos/modSimul_incVariable.cpp -o $ejecutables/modSimul_incVariable
 	g++ -std=c++11 $1 $codigos/colammk.cpp -o $ejecutables/colammk
-	g++ -std=c++11 -I$includes $1 $codigos/puerto.cpp -o $ejecutables/puerto
+	g++ -std=c++11 -I$includes $1 $codigos/puerto_v1.cpp -o $ejecutables/puerto_v1
+	g++ -std=c++11 -I$includes $1 $codigos/puerto_v2.cpp -o $ejecutables/puerto_v2
+	g++ -std=c++11 -I$includes $1 $codigos/puerto_v3.cpp -o $ejecutables/puerto_v3
 
 	echo -e "${orange}Fin de la compilacion${nocolor}"
 
@@ -58,12 +60,34 @@ else
 	echo -e "${purple}Obteniendo datos de los modelos fijo y variable...${nocolor}"
 
 	tlleg=(0.15 9 230 540)
-	tserv=(0.1 6  123 360)
-	for ((A=0;A<3;A=A+1))
+	tserv=(0.1 6 123 360)
+	for ((A=0;A<4;A=A+1))
 	do
 		$ejecutables/modSimul_incFijo ${tlleg[$A]} ${tserv[$A]} 10000 100 >> $datos/modSimul_incFijo_${tlleg[$A]}-${tserv[$A]}.dat
 		$ejecutables/modSimul_incVariable ${tlleg[$A]} ${tserv[$A]} 10000 100 >> $datos/modSimul_incVariable_${tlleg[$A]}-${tserv[$A]}.dat
 	done
+
+	echo -e "${purple}Finalizado${nocolor}"
+
+	echo -e "${purple}Obteniendo datos del modelo de servidores...${nocolor}"
+
+	tlleg=(9 11 13 17)
+	tserv=(1 3 5 7)
+	for ((A=0;A<4;A=A+1))
+	do
+		$ejecutables/colammk 1 1000 ${tlleg[$A]} ${tserv[$A]} 100 >> $datos/colammk_1_3_${tlleg[$A]}-${tserv[$A]}-100.dat
+		$ejecutables/colammk 5 1000 ${tlleg[$A]} ${tserv[$A]} 100 >> $datos/colammk_5_3_${tlleg[$A]}-${tserv[$A]}-100.dat
+	done
+
+	echo -e "${purple}Finalizado${nocolor}"
+
+	echo -e "${purple}Obteniendo datos del modelo de barcos...${nocolor}"
+
+	$ejecutables/puerto_v1 100 >> $datos/puerto_v1_100_3_1.dat
+	$ejecutables/puerto_v1 100 4 >> $datos/puerto_v1_100_4_1.dat
+	$ejecutables/puerto_v1 100 5 >> $datos/puerto_v1_100_5_1.dat
+	$ejecutables/puerto_v2 100 >> $datos/puerto_v2_100_3_1.dat
+	$ejecutables/puerto_v3 100 >> $datos/puerto_v3_100_3_1.dat
 
 	echo -e "${purple}Finalizado${nocolor}"
 

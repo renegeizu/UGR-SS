@@ -335,7 +335,7 @@ bool busca_suceso(int tipo){
 
 void comienzo_tormenta(){
 	float tmediavuelta;
-	tormenta = true;
+	tormenta = false;
 	nodo.suceso = SUCESO_FIN_TORMENTA;
 	nodo.tiempo = reloj + genera_durtormenta(dur_tormentamin, dur_tormentamax);
 	nodo.reg_cola = reg_cola_null;
@@ -482,11 +482,24 @@ void generador_informes(int simulaciones){
 
 int main(int argc, char *argv[]){
 	int i, simulaciones;
-	if(argc != 2){
-		printf("\n\nFormato Argumentos -> <numero_simulaciones>\n\n");
+	if(argc == 2){
+		sscanf(argv[1],"%d",&simulaciones);
+		num_atraques = 3;
+		remolcadores = 1;
+	}else if(argc == 3){
+		sscanf(argv[1],"%d",&simulaciones);
+		sscanf(argv[2],"%d",&num_atraques);
+		remolcadores = 1;
+	}else if(argc == 4){
+		sscanf(argv[1],"%d",&simulaciones);
+		sscanf(argv[2],"%d",&num_atraques);
+		sscanf(argv[3],"%d",&remolcadores);
+	}else{
+		printf("\nFormato 2 Parametros: <Numero Simulaciones>\n");
+		printf("\nFormato 3 Parametros: <Numero Simulaciones> <Numero Atraques>\n");
+		printf("\nFormato 4 Parametros: <Numero Simulaciones> <Numero Atraques> <Numero Remolcadores>\n");
 		exit(1);
 	}
-	sscanf(argv[1],"%d",&simulaciones);
 	informe = (float **) malloc (simulaciones*sizeof(float *));
 	for(i = 0; i < simulaciones; i++){
 		informe[i] = (float *) malloc (11*sizeof(float));

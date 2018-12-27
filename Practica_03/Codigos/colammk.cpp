@@ -2,10 +2,10 @@
 
 #include <iostream>
 #include <list>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 #include <vector>
 
 using namespace std;
@@ -14,7 +14,7 @@ using namespace std;
 #define suceso_salida 1
 #define suceso_finsimulacion 3
 #define suceso_monitor 4
-#define graficar 1
+#define graficar true
 
 typedef struct {
 	int suceso;
@@ -68,7 +68,7 @@ void inicializacion(){
 	acum_cola = 0.0;
 	acum_sistema = 0.0;
 	acum_ocio = 0.0;
-	acum_retraso = 0.0;
+	acum_retraso = 0;
 	tultsuc_cola = reloj;
 	tultsuc_ocio = reloj;
 	tultsuc_sistema = reloj;
@@ -84,6 +84,13 @@ void inicializacion(){
 	nodo.retraso = nada;
 	insertar_lsuc(nodo);
 	parar = false;
+	totalMedidasMed[0] = 0.0;
+	totalMedidasMed[1] = 0.0;
+	totalMedidasMed[2] = 0.0;
+	totalMedidasMed[3] = 0.0;
+	totalMedidasMed[4] = 0.0;
+	totalMedidasMed[5] = 0.0;
+	totalMaxColaMed = 0;
 }
 
 void temporizacion(){
@@ -105,7 +112,7 @@ void llegada(){
 		tultsuc_ocio = reloj;
 		libres--;
 		nodo.suceso = suceso_salida;
-		nodo.tiempo = reloj+generaservicio(tserv);
+		nodo.tiempo = reloj+generaservicio(tserv*m);
 		nodo.retraso = nada;
 		insertar_lsuc(nodo);
 	}else{
@@ -135,7 +142,7 @@ void salida(){
       	valor = cola.front();
 	     cola.pop_front();
      	nodo.suceso = suceso_salida;
-     	nodo.tiempo = reloj+generaservicio(tserv);
+     	nodo.tiempo = reloj+generaservicio(tserv*m);
      	nodo.retraso = reloj-valor;
      	insertar_lsuc(nodo);
      }else{
@@ -148,7 +155,7 @@ void salida(){
 void fin(int ciclo){
 	parar = true;
 	float retrasomedio = acum_retraso/atendidos;
-	float estanciamedia = retrasomedio + tserv;
+	float estanciamedia = retrasomedio + tserv*m;
 	acum_cola += (reloj - tultsuc_cola) * encola;
 	float encolamedio = acum_cola/reloj;
 	acum_sistema += (reloj - tultsuc_sistema) * ensistema;
@@ -279,6 +286,14 @@ int main(int argc, char *argv[]){
 		totalMedidasDesv[4][0] = sqrt(totalMedidasDesv[4][0]*CalculoInic);
 		totalMedidasDesv[5][0] = sqrt(totalMedidasDesv[5][0]*CalculoInic);
 		totalMaxColaDesv[0] = sqrt(totalMaxColaDesv[0]*CalculoInic);
+		printf("\nVALORES TEORICOS\n");
+		printf("\nTiempo Medio de Espera en Cola: %.3f", (float)((tserv*tserv)/(tlleg-tserv)));
+		printf("\nTiempo Medio de Estancia en el Sistema: %.3f", (float)((tserv*tlleg)/(tlleg-tserv)));
+		printf("\nNumero Medio de Clientes en Cola: %.3f", (float)((tserv*tserv)/(tlleg*(tlleg-tserv))));
+		printf("\nNumero Medio de Clientes en el Sistema: %.3f", (float)((tserv)/(tlleg-tserv)));
+		printf("\nLongitud Media de colas no Vacias: %.3f", (float)((tlleg)/(tlleg-tserv)));
+		printf("\nPorcentaje Medio de Tiempo de Ocio del Servidor: %.3f", (float)((1-(tserv/tlleg))*100));
+		printf("\n\nVALORES EXPERIMENTALES\n");
 		printf("\nTiempo Medio de Espera en Cola = %.3f", totalMedidasMed[0]);
 		printf("\nTiempo Medio de Estancia en el Sistema = %.3f", totalMedidasMed[1]);	
 		printf("\nNumero Medio de Personas en Cola = %.3f", totalMedidasMed[2]);
