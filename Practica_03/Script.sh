@@ -49,7 +49,8 @@ else
 	# Compilamos todos los .cpp y .C
 	g++ -std=c++11 $1 $codigos/modSimul_incFijo.cpp -o $ejecutables/modSimul_incFijo
 	g++ -std=c++11 $1 $codigos/modSimul_incVariable.cpp -o $ejecutables/modSimul_incVariable
-	g++ -std=c++11 $1 $codigos/colammk.cpp -o $ejecutables/colammk
+	g++ -std=c++11 $1 $codigos/colammk_v1.cpp -o $ejecutables/colammk_v1
+	g++ -std=c++11 $1 $codigos/colammk_v2.cpp -o $ejecutables/colammk_v2
 	g++ -std=c++11 -I$includes $1 $codigos/puerto_v1.cpp -o $ejecutables/puerto_v1
 	g++ -std=c++11 -I$includes $1 $codigos/puerto_v2.cpp -o $ejecutables/puerto_v2
 	g++ -std=c++11 -I$includes $1 $codigos/puerto_v3.cpp -o $ejecutables/puerto_v3
@@ -71,12 +72,14 @@ else
 
 	echo -e "${purple}Obteniendo datos del modelo de servidores...${nocolor}"
 
-	tlleg=(9 11 13 17)
-	tserv=(1 3 5 7)
+	tlleg=(0.9 1.1 1.3 1.7)
+	tserv=(0.1 0.3 0.5 0.7)
 	for ((A=0;A<4;A=A+1))
 	do
-		$ejecutables/colammk 1 1000 ${tlleg[$A]} ${tserv[$A]} 100 >> $datos/colammk_1_3_${tlleg[$A]}-${tserv[$A]}-100.dat
-		$ejecutables/colammk 5 1000 ${tlleg[$A]} ${tserv[$A]} 100 >> $datos/colammk_5_3_${tlleg[$A]}-${tserv[$A]}-100.dat
+		$ejecutables/colammk_v1 1 1000 ${tlleg[$A]} ${tserv[$A]} 100 >> $datos/colammk_v1_1_${tlleg[$A]}-${tserv[$A]}-100.dat
+		$ejecutables/colammk_v1 3 1000 ${tlleg[$A]} ${tserv[$A]} 100 >> $datos/colammk_v1_3_${tlleg[$A]}-${tserv[$A]}-100.dat
+		$ejecutables/colammk_v2 1 1000 ${tlleg[$A]} ${tserv[$A]} 100 >> $datos/colammk_v2_1_${tlleg[$A]}-${tserv[$A]}-100.dat
+		$ejecutables/colammk_v2 3 1000 ${tlleg[$A]} ${tserv[$A]} 100 >> $datos/colammk_v2_3_${tlleg[$A]}-${tserv[$A]}-100.dat
 	done
 
 	echo -e "${purple}Finalizado${nocolor}"

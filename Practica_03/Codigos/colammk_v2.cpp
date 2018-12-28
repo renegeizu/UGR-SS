@@ -44,19 +44,16 @@ void insertar_lsuc(suc n){
 	lsuc.sort(compare);
 }
 
-float generador_exponencial(float media){
-	float u;
-	u = (float) random();
-	u = u/(float)(RAND_MAX+1.0);
-	return(-media*log(1-u));
+double generador_uniforme(float media){
+	return (double) (random()/((double) RAND_MAX+media));
 }
 
 float generallegada(float media){
-	return generador_exponencial(media);
+	return generador_uniforme(media*m);
 }
 
 float generaservicio(float media){
-	return generador_exponencial(media);
+	return generador_uniforme(media*m);
 }
 
 void inicializacion(){
@@ -112,7 +109,7 @@ void llegada(){
 		tultsuc_ocio = reloj;
 		libres--;
 		nodo.suceso = suceso_salida;
-		nodo.tiempo = reloj+generaservicio(tserv*m);
+		nodo.tiempo = reloj+generaservicio(tserv);
 		nodo.retraso = nada;
 		insertar_lsuc(nodo);
 	}else{
@@ -142,7 +139,7 @@ void salida(){
       	valor = cola.front();
 	     cola.pop_front();
      	nodo.suceso = suceso_salida;
-     	nodo.tiempo = reloj+generaservicio(tserv*m);
+     	nodo.tiempo = reloj+generaservicio(tserv);
      	nodo.retraso = reloj-valor;
      	insertar_lsuc(nodo);
      }else{
@@ -155,7 +152,7 @@ void salida(){
 void fin(int ciclo){
 	parar = true;
 	float retrasomedio = acum_retraso/atendidos;
-	float estanciamedia = retrasomedio + tserv*m;
+	float estanciamedia = retrasomedio + tserv;
 	acum_cola += (reloj - tultsuc_cola) * encola;
 	float encolamedio = acum_cola/reloj;
 	acum_sistema += (reloj - tultsuc_sistema) * ensistema;
@@ -238,6 +235,7 @@ int main(int argc, char *argv[]){
 		printf("\nFormato 5 Parametros: <Numero Servidores> <Tiempo Parada> <tlleg> <tserv> <Numero Simulaciones>\n");
 		exit(1);
 	}
+	tserv *= m;
 	srandom(time(NULL));
 	for(int j = 0; j < numSimul; j++){
 		totalMedidasDesv.push_back(vector<float>(numSimul));
