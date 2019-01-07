@@ -47,14 +47,14 @@ else
 	echo -e "${orange}Compilando codigos...${nocolor}"
 
 	# Compilamos todos los .cpp y .C
-	g++ -std=c++11 $1 $codigos/modSimul_incFijo.cpp -o $ejecutables/modSimul_incFijo
+	g++ -std=c++11 $1 $codigos/modelDinamic.cpp -o $ejecutables/modelDinamic
 
 	echo -e "${orange}Fin de la compilacion${nocolor}"
 
 	# Le pasamos valores al modelo y recogemos la informacion en .dat
-	echo -e "${purple}Obteniendo datos de los modelos...${nocolor}"
+	echo -e "${purple}Obteniendo datos del modelo...${nocolor}"
 
-	# Codigo Aqui
+		# Codigo Aqui
 
 	echo -e "${purple}Finalizado${nocolor}"
 
