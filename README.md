@@ -18,3 +18,7 @@ Practica 03
 --------------------
 + Modelo de Simulacion Discreto
 + Analisis de Salidas y Experimentacion
+
+Examen 01
+--------------------
++ Alternativa a Examen - MonteCarlo
