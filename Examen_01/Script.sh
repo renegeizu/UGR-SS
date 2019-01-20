@@ -53,7 +53,7 @@ else
 	# Le pasamos valores al modelo de MonteCarlo y recogemos la informacion en .dat
 	echo -e "${purple}Obteniendo datos del modelo de MonteCarlo...${nocolor}"
 	
-	$ejecutables/MonteCarlo_Examen 100 >> $datos/MonteCarlo_Examen.dat
+	$ejecutables/MonteCarlo_Examen 100000 >> $datos/MonteCarlo_Examen.dat
 
 	echo -e "${purple}Finalizado${nocolor}"
 
