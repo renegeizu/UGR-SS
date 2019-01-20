@@ -15,33 +15,7 @@ float estado[numeq], oldestado[numeq], t, dt, tinic, tfin;
 float a11, a12, a21, a22;
 
 void salida(){
-	printf("%f\t%f\t%f", estado[0], estado[1], t);
-}
-
-void integracion(bool flag){
-	if(flag){
-		integracion_runge_kutta();
-	}else{
-		integracion_euler();
-	}
-}
-
-void integracion_runge_kutta(){
-	do{
-		salida();
-		oldestado = estado;
-		one-step-runge-kutta(oldestado, estado, t, dt);
-		t += dt;
-	}while(t < tfin);
-}
-
-void integracion_euler(){
-	do{
-		salida();
-		oldestado = estado;
-		one-step-euler(oldestado, estado, t, dt);
-		t += dt;
-	}while(t < tfin);
+	printf("%f\t%f\t%f\n", estado[0], estado[1], t);
 }
 
 void derivacion(float est[numeq], float f[numeq], float tt){
@@ -49,7 +23,7 @@ void derivacion(float est[numeq], float f[numeq], float tt){
 	f[1] = a21 * est[0] * est[1] - a22 * est[1];
 }
 
-void one-step-runge-kutta(float inp[numeq], float out[numeq], float tt, float hh){
+void one_step_runge_kutta(float inp[numeq], float out[numeq], float tt, float hh){
 	int i, j;
 	float time, f[numeq], incr, k[numeq][4];
 	for(i = 0; i < numeq; i++){
@@ -76,15 +50,44 @@ void one-step-runge-kutta(float inp[numeq], float out[numeq], float tt, float hh
 	}
 }
 
-void one-step-euler(float inp[numeq], float out[numeq], float tt, float hh){
+void one_step_euler(float inp[numeq], float out[numeq], float tt, float hh){
 	float f[numeq];
 	derivacion(inp, f, tt);
-	for(i = 0; i < numeq; i++){
+	for(int i = 0; i < numeq; i++){
 		out[i] = inp[i] + hh * f[i];
 	}
 }
 
+void integracion_runge_kutta(){
+	do{
+		salida();
+		oldestado[0] = estado[0];
+		oldestado[1] = estado[1];
+		one_step_runge_kutta(oldestado, estado, t, dt);
+		t += dt;
+	}while(t < tfin);
+}
+
+void integracion_euler(){
+	do{
+		salida();
+		oldestado[0] = estado[0];
+		oldestado[1] = estado[1];
+		one_step_euler(oldestado, estado, t, dt);
+		t += dt;
+	}while(t < tfin);
+}
+
+void integracion(bool flag){
+	if(flag){
+		integracion_runge_kutta();
+	}else{
+		integracion_euler();
+	}
+}
+
 int main(int argc, char *argv[]){
+	int aux = 0;
 	if(argc == 11){
 		sscanf(argv[1], "%f", &a11);
 		sscanf(argv[2], "%f", &a12);
@@ -95,7 +98,12 @@ int main(int argc, char *argv[]){
 		sscanf(argv[7], "%f", &tfin);
 		sscanf(argv[8], "%f", &estado[0]);
 		sscanf(argv[9], "%f", &estado[1]);
-		sscanf(argv[10], "%f", &tipo);
+		sscanf(argv[10], "%d", &aux);
+		if(aux){
+			tipo = true;
+		}else{
+			tipo = false;
+		}
 	}else{
 		printf("\nArgumentos: <a11> <a12> <a21> <a22> <Int_Calculo> <T_Inicio> <T_Fin> <Est_X> <Est_Y>\n");
 		printf("<Tipo (0: runge kutta, 1: euler)>\n");
