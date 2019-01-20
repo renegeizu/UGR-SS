@@ -53,21 +53,36 @@ else
 
 	# Le pasamos valores al modelo y recogemos la informacion en .dat
 	echo -e "${purple}Obteniendo datos del modelo...${nocolor}"
-		
-		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 500 100 0 >> $datos/modelDinamic_RungeKutta_01.dat
+		# Condiciones Iniciales
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 0 100 500 100 0 >> $datos/modelDinamic_RungeKutta_01.dat
 		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 500 100 1 >> $datos/modelDinamic_Euler_01.dat
-	
-		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 600 200 0 >> $datos/modelDinamic_RungeKutta_02.dat
+		# Incrementos
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 0 100 600 200 0 >> $datos/modelDinamic_RungeKutta_02.dat
 		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 600 200 1 >> $datos/modelDinamic_Euler_02.dat
-		
-		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 700 300 0 >> $datos/modelDinamic_RungeKutta_03.dat
-		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 700 300 1 >> $datos/modelDinamic_Euler_03.dat
-		
-		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 400 50 0 >> $datos/modelDinamic_RungeKutta_04.dat
-		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 400 50 1 >> $datos/modelDinamic_Euler_04.dat
-		
-		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 300 25 0 >> $datos/modelDinamic_RungeKutta_05.dat
-		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 300 25 1 >> $datos/modelDinamic_Euler_05.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 0 100 600 100 0 >> $datos/modelDinamic_RungeKutta_03.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 600 100 1 >> $datos/modelDinamic_Euler_03.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 0 100 500 200 0 >> $datos/modelDinamic_RungeKutta_04.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 500 200 1 >> $datos/modelDinamic_Euler_04.dat
+		# Decrementos
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 0 100 400 50 0 >> $datos/modelDinamic_RungeKutta_05.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 400 50 1 >> $datos/modelDinamic_Euler_05.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 0 100 400 100 0 >> $datos/modelDinamic_RungeKutta_06.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 400 100 1 >> $datos/modelDinamic_Euler_06.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 0 100 500 50 0 >> $datos/modelDinamic_RungeKutta_07.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.1 1 100 500 50 1 >> $datos/modelDinamic_Euler_07.dat
+		#Modificaciones
+		$ejecutables/modelDinamic 5 0.5 0.0004 0.2 0.1 0 100 500 100 0 >> $datos/modelDinamic_RungeKutta_08.dat
+		$ejecutables/modelDinamic 5 0.5 0.0004 0.2 0.1 1 100 500 100 0 >> $datos/modelDinamic_Euler_08.dat
+		$ejecutables/modelDinamic 10 0.05 0.0004 0.2 0.1 0 100 500 100 1 >> $datos/modelDinamic_RungeKutta_09.dat
+		$ejecutables/modelDinamic 10 0.05 0.0004 0.2 0.1 1 100 500 100 1 >> $datos/modelDinamic_Euler_09.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.1 0.1 0 100 500 100 0 >> $datos/modelDinamic_RungeKutta_10.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.1 0.1 1 100 500 100 0 >> $datos/modelDinamic_Euler_10.dat
+		$ejecutables/modelDinamic 5 0.05 0.004 0.2 0.1 0 100 500 100 1 >> $datos/modelDinamic_RungeKutta_11.dat
+		$ejecutables/modelDinamic 5 0.05 0.004 0.2 0.1 1 100 500 100 1 >> $datos/modelDinamic_Euler_11.dat
+		# Cambios en H
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.5 0 100 600 200 0 >> $datos/modelDinamic_RungeKutta_12.dat
+		$ejecutables/modelDinamic 5 0.05 0.0004 0.2 0.01 1 100 600 200 1 >> $datos/modelDinamic_Euler_12.dat
+
 
 	echo -e "${purple}Finalizado${nocolor}"
 
@@ -98,6 +113,27 @@ else
 		
 		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_RungeKutta_05.dat' using 1:2:3 title 'M. Dinamic (RK) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_RungeKutta_05.png'; replot"
 		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_Euler_05.dat' using 1:2:3 title 'M. Dinamic (Euler) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_Euler_05.png'; replot"
+	
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_RungeKutta_06.dat' using 1:2:3 title 'M. Dinamic (RK) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_RungeKutta_06.png'; replot"
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_Euler_06.dat' using 1:2:3 title 'M. Dinamic (Euler) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_Euler_06.png'; replot"
 		
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_RungeKutta_07.dat' using 1:2:3 title 'M. Dinamic (RK) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_RungeKutta_07.png'; replot"
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_Euler_07.dat' using 1:2:3 title 'M. Dinamic (Euler) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_Euler_07.png'; replot"
+		
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_RungeKutta_08.dat' using 1:2:3 title 'M. Dinamic (RK) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_RungeKutta_08.png'; replot"
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_Euler_08.dat' using 1:2:3 title 'M. Dinamic (Euler) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_Euler_08.png'; replot"
+		
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_RungeKutta_09.dat' using 1:2:3 title 'M. Dinamic (RK) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_RungeKutta_09.png'; replot"
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_Euler_09.dat' using 1:2:3 title 'M. Dinamic (Euler) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_Euler_09.png'; replot"
+		
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_RungeKutta_10.dat' using 1:2:3 title 'M. Dinamic (RK) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_RungeKutta_10.png'; replot"
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_Euler_10.dat' using 1:2:3 title 'M. Dinamic (Euler) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_Euler_10.png'; replot"
+
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_RungeKutta_11.dat' using 1:2:3 title 'M. Dinamic (RK) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_RungeKutta_11.png'; replot"
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_Euler_11.dat' using 1:2:3 title 'M. Dinamic (Euler) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_Euler_11.png'; replot"
+		
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_RungeKutta_12.dat' using 1:2:3 title 'M. Dinamic (RK) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_RungeKutta_12.png'; replot"
+		gnuplot -e "set dgrid3d 30,30; set hidden3d; splot '$datos/modelDinamic_Euler_12.dat' using 1:2:3 title 'M. Dinamic (Euler) - Parametros: X Y Tiempo' with lines; set terminal png; set output '$graficas/modelDinamic_Euler_12.png'; replot"
+	
 	echo -e "${gray}Finalizado${nocolor}"
 fi
